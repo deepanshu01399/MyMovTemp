@@ -3,4 +3,6 @@
     <string name="back">back</string>
     <string name="header">header</string>
     <string name="save">save</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
+
 </resources>

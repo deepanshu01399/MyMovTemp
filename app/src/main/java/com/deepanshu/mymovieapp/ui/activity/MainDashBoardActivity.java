@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.deepanshu.mymovieapp.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainDashBoardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

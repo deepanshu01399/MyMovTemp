@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/dashboard"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person"
+        android:title="Home"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/tasks"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person"
+        android:title="Downloads"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/three_sixty"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person"
+        android:title="Search"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/notification"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person"
+        android:title="Notification"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person"
+        android:title="Profile"
+        app:showAsAction="always" />
+</menu>
