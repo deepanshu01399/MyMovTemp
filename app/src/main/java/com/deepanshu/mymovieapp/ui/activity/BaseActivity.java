@@ -1,10 +1,19 @@
 package com.deepanshu.mymovieapp.ui.activity;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,15 +25,34 @@ import com.deepanshu.mymovieapp.ui.custom.ColoredSnackbar;
 import com.google.android.material.snackbar.Snackbar;
 
 public abstract class BaseActivity extends AppCompatActivity implements IEssentialFeatures {
+    private ComponentName componentName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(getResources().getColor(R.color.light_sky_blue));
+        }
+
+        ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            componentName = am.getAppTasks().get(0).getTaskInfo().topActivity;
+            Log.e("ComponentName ",componentName.getShortClassName());
+        } else {
+            //noinspection deprecation
+            componentName = am.getRunningTasks(1).get(0).topActivity;
+            Log.e("ComponentName1 ",componentName.getShortClassName());
+
+        }
+
         if (getLayoutByID() != 0)
             setContentView(getLayoutByID());
-
-        mangerToolbar();
+        manageToolBar();
         getViewById();
         setHeaderTitle(getHeaderTitle());
 
@@ -37,21 +65,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IEssenti
             if (txtHeader != null)
                 txtHeader.setText(headerTitle);
         }
-    }
-
-    @Override
-    public int getLayoutByID() {
-        return 0;
-    }
-
-    @Override
-    public void getViewById() {
-
-    }
-
-    @Override
-    public void mangerToolbar() {
-
     }
 
     @Override
@@ -92,11 +105,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IEssenti
                 }
             });
         }
-
-    }
-
-    @Override
-    public void onNetworkChangeStatus(boolean networkStatus, String msg) {
 
     }
 
@@ -160,4 +168,39 @@ public abstract class BaseActivity extends AppCompatActivity implements IEssenti
         startActivity(i);
     }
 
-}
+    public void startActivity(Class<?> className, Bundle bundle, String action) {
+        Intent i = new Intent(this, className);
+        if (bundle != null)
+            i.putExtras(bundle);
+
+        if (action != null)
+            i.setAction(action);
+        startActivity(i);
+    }
+
+    protected void startActivity(Class<?> className, Bundle bundle) {
+        Intent i = new Intent(this, className);
+        if (bundle != null)
+            i.putExtras(bundle);
+        startActivity(i);
+    }
+
+
+
+    public void openDashboardScreenFromBaseActivity(Bundle bundle) {
+        // TODO Here we will write a code to navigate the control to the Dashboard screen.
+        startActivityClearTop(MainDashBoardActivity.class, null, null);
+    }
+
+    public void toolbarTitleAnimation(TextView title) {
+        Animation myAnimation = AnimationUtils.loadAnimation(this, R.anim.toolbar_title_animation);
+        title.startAnimation(myAnimation);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setHeaderTitle(getHeaderTitle());
+    }
+
+    }

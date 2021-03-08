@@ -7,7 +7,6 @@ public interface IEssentialFeatures {
     void setHeaderTitle(String headerTitle);
     int getLayoutByID();
     void getViewById();
-    void mangerToolbar();
     void hideToolBarnextValue();
     void updateToolBarNextValue(String nextValue);
     void updateToolBarBackValue(String backTxtValue);
@@ -19,5 +18,11 @@ public interface IEssentialFeatures {
     void showSnackbarInfo(String message);
     void showProgressBar();
     void hideProgressbar();
+    void hideToolbarNext();
+    void showToolbarNext();
+    void manageToolBar();
+
+    void onNetworkChange(boolean networkStatus, String msg);
+
 
 }
