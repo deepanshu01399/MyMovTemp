@@ -6,7 +6,7 @@
         android:bottomRightRadius="30dp"
         android:topRightRadius="30dp" />
 
-    <solid android:color="@color/click_blue" />
+    <solid android:color="@color/utla_light_sky_blue" />
 
     <padding
         android:bottom="0dp"

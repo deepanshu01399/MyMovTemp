@@ -13,7 +13,7 @@ import com.deepanshu.mymovieapp.R;
 
 public  class ProfileFragment extends  BaseFragment {
     public LayoutInflater mInflater;
-    private static final String TAG = "BaseFragment";
+    private static final String TAG = "ProfileFragment";
 
 
     public ProfileFragment() {

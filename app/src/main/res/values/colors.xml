@@ -18,8 +18,9 @@
     <color name="light_black">#66000000</color>
     <color name="orange">#F0AE61</color>
     <color name="lightGreen">#3BC1B3</color>
-    <color name="lightGreenblue">#14E3ED</color>
-    <color name="light_sky_blue">#8DC9F6</color>
+    <color name="lightGreenblue">#0CC6CF</color>
+    <color name="light_sky_blue">#14E3ED</color>
+    <color name="utla_light_sky_blue">#DDF8FA</color>
     <color name="green_light">#B8E986</color>
     <color name="shimmer_background">#dddddd</color>
     <color name="recently_view_line">#EDECEBEB</color>

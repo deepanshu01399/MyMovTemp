@@ -5,12 +5,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Menu;
@@ -19,29 +21,32 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.deepanshu.mymovieapp.R;
 import com.deepanshu.mymovieapp.interfaces.FragmentChangeListener;
+import com.deepanshu.mymovieapp.ui.custom.ColoredSnackbar;
 import com.deepanshu.mymovieapp.ui.fragment.BaseFragment;
 import com.deepanshu.mymovieapp.ui.fragment.DashBoardFragment;
 import com.deepanshu.mymovieapp.ui.fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
-public class MainDashBoardActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FragmentManager.OnBackStackChangedListener {
+public  class MainDashBoardActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private BottomNavigationView bottomNavigationView;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private View headerNavigationview;
     private Toolbar toolbar;
-    private TextView mToolbarTitle, txtUserName, txtuserEmail, appVersion;
+    private TextView mToolbarTitle, txtUserName;
     private Menu menuItems;
     private RelativeLayout mainLayProfile;
     private final DashBoardFragment dashboardFragment = new DashBoardFragment();
     private BaseFragment currentFragment = dashboardFragment;
     public FragmentManager mFragmentManager;
     public static String TAG = "MainDashBoard";
+    boolean doubleTabBackButton = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +56,11 @@ public class MainDashBoardActivity extends BaseActivity implements BottomNavigat
                     .getDecorView()
                     .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
-        if (getLayoutByID() != 0)
-            setContentView(getLayoutByID());
-        manageToolBar();
-        getViewById();
-        setHeaderTitle(getHeaderTitle());
 
+
+    }
+
+    public MainDashBoardActivity(){
 
     }
 
@@ -82,7 +86,7 @@ public class MainDashBoardActivity extends BaseActivity implements BottomNavigat
         setonClickListner();
 
         updateHederProfileInfo();
-        checkAndSetCurrentFragment();
+        //checkAndSetCurrentFragment();
         NavigationView navigationView = findViewById(R.id.nav_view);
 
         if (navigationView != null) {
@@ -93,6 +97,31 @@ public class MainDashBoardActivity extends BaseActivity implements BottomNavigat
         initClickListner();
         replaceFragment(currentFragment, getSupportFragmentManager(), true);
 
+
+    }
+
+    @Override
+    public void hideToolBarnextValue() {
+
+    }
+
+    @Override
+    public void updateToolBarNextValue(String nextValue) {
+
+    }
+
+    @Override
+    public void updateToolBarBackValue(String backTxtValue) {
+
+    }
+
+    @Override
+    public void hadleToolBarNextValue(TextView textView) {
+
+    }
+
+    @Override
+    public void handleToolBarBackValue(TextView textView) {
 
     }
 
@@ -111,7 +140,8 @@ public class MainDashBoardActivity extends BaseActivity implements BottomNavigat
 
     private void setonClickListner() {
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-
+        navigationView.setNavigationItemSelectedListener(this);
+        mainLayProfile.setOnClickListener(this);
 
     }
 
@@ -127,6 +157,8 @@ public class MainDashBoardActivity extends BaseActivity implements BottomNavigat
         mToolbarTitle.setTextColor(getResources().getColor(R.color.white));
         toolbar.setNavigationIcon(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbar.findViewById(R.id.txtSave).setVisibility(View.VISIBLE);
+        toolbar.findViewById(R.id.txtSave).setOnClickListener(this);
 
 
     }
@@ -195,6 +227,16 @@ public class MainDashBoardActivity extends BaseActivity implements BottomNavigat
     }
 
     @Override
+    public void showProgressBar() {
+
+    }
+
+    @Override
+    public void hideProgressbar() {
+
+    }
+
+    @Override
     public void hideToolbarNext() {
 
     }
@@ -218,6 +260,8 @@ public class MainDashBoardActivity extends BaseActivity implements BottomNavigat
                 case R.id.profile:
                     currentFragment = new ProfileFragment();
                     break;
+                default:
+                    currentFragment = new DashBoardFragment();
             }
             if (currentFragment != null) {
                 replaceFragment(currentFragment, getSupportFragmentManager(), true);
@@ -319,5 +363,65 @@ public class MainDashBoardActivity extends BaseActivity implements BottomNavigat
         }
     }
 
+
+    @Override
+    public void onClick(View view) {
+        if (drawer.isDrawerOpen(GravityCompat.START))
+            closeDrawer();
+        switch (view.getId()) {
+            case R.id.mainLayProfile:
+                Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
+                replaceFragment(new ProfileFragment(), getSupportFragmentManager(), true);
+                break;
+            case R.id.txtSave:
+                Toast.makeText(this, "Save clicked", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        checkAndSetCurrentFragment();
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (this.drawer.isDrawerOpen(GravityCompat.START)) {
+            this.drawer.closeDrawer(GravityCompat.START);
+        } else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            int backEntryCount = fragmentManager.getBackStackEntryCount() - 1;
+            if (backEntryCount == 0) {
+                if (doubleTabBackButton) {
+                    //super.onBackPressed();
+                    finish();
+                }
+
+                if (this.drawer.isDrawerOpen(GravityCompat.START)) {
+                    this.drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    doubleTabBackButton = true;
+                    ColoredSnackbar.alert(Snackbar.make(findViewById(android.R.id.content), R.string.click_back_wrng_msg, Snackbar.LENGTH_LONG)).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            doubleTabBackButton = false;
+                        }
+                    }, 2500);
+                }
+            } else {
+                if (backEntryCount == 1) {
+                    BaseFragment f = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    bottomNavigationView.setSelectedItemId(R.id.dashboard);
+                }
+                else {
+                    super.onBackPressed();
+                    checkAndSetCurrentFragment();
+
+
+                }
+            }
+
+        }
+    }
 
 }

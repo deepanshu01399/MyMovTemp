@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
-import com.deepanshu.mymovieapp.R;
 import com.deepanshu.mymovieapp.ui.activity.BaseActivity;
 
 public abstract class BaseFragment extends Fragment implements IFragment {
@@ -139,4 +138,6 @@ public abstract class BaseFragment extends Fragment implements IFragment {
         ((BaseActivity) getActivity()).openDashboardScreenFromBaseActivity(bundle);
 //        ((BaseActivity)getActivity()).finish();
     }
+
+
 }
