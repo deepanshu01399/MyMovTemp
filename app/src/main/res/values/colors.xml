@@ -36,4 +36,5 @@
     <color name="text_color_toast">#1A4F7F</color>
     <color name="toast_background">#D2E5FB</color>
     <color name="dim_grey">#A9A9A9</color>
+    <color name="lightwhite">#E7E4E4</color>
 </resources>

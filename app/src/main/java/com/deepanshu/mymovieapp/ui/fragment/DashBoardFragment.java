@@ -6,13 +6,22 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import com.deepanshu.mymovieapp.R;
+import com.deepanshu.mymovieapp.ui.module.ShowMovieView;
+import com.deepanshu.mymovieapp.viewpager.HomeScreenHeaderViewPager;
+
+import java.util.ArrayList;
 
 
 public  class DashBoardFragment extends  BaseFragment {
     public LayoutInflater mInflater;
     private static final String TAG = "BaseFragment";
+    private ViewPager viewpager;
+    ArrayList<ShowMovieView> arrayList = new ArrayList<>();
+    ArrayList<ShowMovieView> arrayList2 = new ArrayList<>();
+
 
 
     public DashBoardFragment() {
@@ -36,6 +45,26 @@ public  class DashBoardFragment extends  BaseFragment {
         View view = inflater.inflate(R.layout.dashboard_fragment,container,false);
         initView(view);
         setOnCLickListner();
+        initShowMovieView();
+        viewpager.setAdapter(new HomeScreenHeaderViewPager(arrayList,getActivity()));
+        viewpager.setPageMargin(20);
+        viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         return  view;
     }
 
@@ -43,6 +72,8 @@ public  class DashBoardFragment extends  BaseFragment {
     }
 
     private void initView(View view) {
+        viewpager = (ViewPager) view.findViewById(R.id.viewpager);
+
     }
 
 
@@ -69,5 +100,16 @@ public  class DashBoardFragment extends  BaseFragment {
         fragmentManager.executePendingTransactions();
     }
 
+    private void initShowMovieView() {
+        arrayList.clear();
+        arrayList.add(new ShowMovieView(R.drawable.edu1));
+        arrayList.add(new ShowMovieView(R.drawable.edu2));
+        arrayList.add(new ShowMovieView(R.drawable.edu3));
+        arrayList.add(new ShowMovieView(R.drawable.edu4));
+        arrayList.add(new ShowMovieView(R.drawable.edu5));
+        arrayList.add(new ShowMovieView(R.drawable.edu6));
+        arrayList.add(new ShowMovieView(R.drawable.edu1));
+        arrayList.add(new ShowMovieView(R.drawable.edu2));
+    }
 
 }
