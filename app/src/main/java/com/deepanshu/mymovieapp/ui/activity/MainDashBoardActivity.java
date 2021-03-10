@@ -47,6 +47,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
     public FragmentManager mFragmentManager;
     public static String TAG = "MainDashBoard";
     boolean doubleTabBackButton = false;
+    private  Boolean isAbleToAddOnStack = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,9 +158,8 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
         mToolbarTitle.setTextColor(getResources().getColor(R.color.white));
         toolbar.setNavigationIcon(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        toolbar.findViewById(R.id.txtSave).setVisibility(View.VISIBLE);
+        toolbar.findViewById(R.id.txtSave).setVisibility(View.INVISIBLE);
         toolbar.findViewById(R.id.txtSave).setOnClickListener(this);
-
 
     }
 
@@ -169,6 +169,8 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
         //super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.contact_icon);
+        MenuItem menuSearch = menu.findItem(R.id.search);
+        menuSearch.setVisible(false);
         menuItem.setVisible(false);
         menuItems = menu;
         return true;
@@ -263,9 +265,10 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                 default:
                     currentFragment = new DashBoardFragment();
             }
-            if (currentFragment != null) {
+//            if (currentFragment != null && item.getItemId()== R.id.profile) {
+//                 replaceFragment(currentFragment, getSupportFragmentManager(), isAbleToAddOnStack);
+//            }else
                 replaceFragment(currentFragment, getSupportFragmentManager(), true);
-            }
 
         return true;
     }
@@ -371,7 +374,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
         switch (view.getId()) {
             case R.id.mainLayProfile:
                 Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
-                replaceFragment(new ProfileFragment(), getSupportFragmentManager(), true);
+                replaceFragment(new ProfileFragment(), getSupportFragmentManager(), false);
                 break;
             case R.id.txtSave:
                 Toast.makeText(this, "Save clicked", Toast.LENGTH_SHORT).show();
@@ -389,6 +392,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
         } else {
             FragmentManager fragmentManager = getSupportFragmentManager();
             int backEntryCount = fragmentManager.getBackStackEntryCount() - 1;
+            Log.e(TAG,"PagesOnBackStack :"+backEntryCount);
             if (backEntryCount == 0) {
                 if (doubleTabBackButton) {
                     //super.onBackPressed();
@@ -411,10 +415,14 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                 if (backEntryCount == 1) {
                     BaseFragment f = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                     fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    isAbleToAddOnStack = false;
                     bottomNavigationView.setSelectedItemId(R.id.dashboard);
                 }
                 else {
+                    BaseFragment f = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                     super.onBackPressed();
+                    //getFragmentManager().popBackStack();
+                    isAbleToAddOnStack = false;
                     checkAndSetCurrentFragment();
 
 
