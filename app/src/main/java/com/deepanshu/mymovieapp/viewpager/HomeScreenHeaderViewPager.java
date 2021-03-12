@@ -27,7 +27,7 @@ public class HomeScreenHeaderViewPager extends PagerAdapter {
     /* <p>When you implement a PagerAdapter, you must override the following methods
      * at minimum:</p>
      * <ul>
-     * <li>{@link #instantiateItem(ViewGroup, int)}</li>
+     * <li>{@link #insta    ntiateItem(ViewGroup, int)}</li>
      * <li>{@link #destroyItem(ViewGroup, int, Object)}</li>
      * <li>{@link #getCount()}</li>
      * <li>{@link #isViewFromObject(View, Object)}</li>
@@ -48,7 +48,6 @@ public class HomeScreenHeaderViewPager extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
         View itemView = layoutinflater.inflate(R.layout.headerbanner, container, false);
-        CardView headerBannerCardview  = itemView.findViewById(R.id.headerBannerCardview);
         ImageView imageView = itemView.findViewById(R.id.view_image);
         imageView.setImageResource(arrayList.get(position).getImages());
 
@@ -60,7 +59,7 @@ public class HomeScreenHeaderViewPager extends PagerAdapter {
             imageView.getLayoutParams().height = getScreenHeight() / 2 + 80;
         }
         if(itemView.getParent()!=null){
-            ((ViewGroup)itemView.getParent()).removeView(itemView); // <- fix
+            ((ViewGroup)itemView.getParent()).removeView(itemView); // <- used to remove old view
         }
         container.addView(itemView);
         imageView.setOnClickListener(new View.OnClickListener() {
