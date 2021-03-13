@@ -12,13 +12,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.deepanshu.mymovieapp.R;
-import com.deepanshu.mymovieapp.ui.module.ShowMovieView;
+import com.deepanshu.mymovieapp.ui.module.MovieViewBanner;
 
 import java.util.ArrayList;
 
@@ -33,11 +30,11 @@ public class HomeScreenHeaderViewPager extends PagerAdapter {
      * <li>{@link #isViewFromObject(View, Object)}</li>
      * </ul>
      *
-     */ ArrayList<ShowMovieView> arrayList;
+     */ ArrayList<MovieViewBanner> arrayList;
     Context context;
     LayoutInflater layoutinflater;
 
-    public HomeScreenHeaderViewPager(ArrayList<ShowMovieView> arrayList, Context context) {
+    public HomeScreenHeaderViewPager(ArrayList<MovieViewBanner> arrayList, Context context) {
         this.context = context;
         this.arrayList = arrayList;
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

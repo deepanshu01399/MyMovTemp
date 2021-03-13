@@ -1,12 +1,13 @@
 package com.deepanshu.mymovieapp.ui.module;
 
-public class ShowMovieView {
+public class MovieViewBanner {
     int images;
 
-    public ShowMovieView(int images) {
+    public MovieViewBanner(int images) {
         this.images = images;
 
     }
+
 
     public int getImages() {
         return images;

@@ -13,9 +13,9 @@
             android:layout_height="wrap_content">
 
             <RelativeLayout
+                android:id="@+id/linear1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/linear1">
+                android:layout_height="wrap_content">
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/viewpager"
@@ -29,29 +29,34 @@
                     android:id="@+id/pager_dots"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
                     android:layout_below="@+id/viewpager"
                     android:background="@android:color/transparent"
+                    android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
                 </LinearLayout>
             </RelativeLayout>
+
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/my_recycler_view"
+                android:id="@+id/recylerCategories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/linear1"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
                 android:scrollbars="none" />
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/my_recycler_view1"
+                android:id="@+id/my_verical_recycler_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/my_recycler_view"
+                android:layout_below="@+id/recylerCategories"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:layout_margin="8dp"
                 android:scrollbars="none" />
+
+
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 

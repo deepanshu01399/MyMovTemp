@@ -58,7 +58,6 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                     .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
 
-
     }
 
     public MainDashBoardActivity(){
@@ -424,7 +423,6 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                     //getFragmentManager().popBackStack();
                     isAbleToAddOnStack = false;
                     checkAndSetCurrentFragment();
-
 
                 }
             }
