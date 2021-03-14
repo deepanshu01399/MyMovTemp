@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="imagesArray">
+        <item>@drawable/edu1</item>
+        <item>@drawable/edu2</item>
+        <item>@drawable/edu3</item>
+        <item>@drawable/edu4</item>
+        <item>@drawable/edu5</item>
+        <item>@drawable/edu6</item>
+    </integer-array>
+</resources>

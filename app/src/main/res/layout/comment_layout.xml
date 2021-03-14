@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/rel1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="3dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/view2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:elevation="12dp"
+            android:innerRadius="0dp"
+            android:shape="ring"
+            android:thicknessRatio="1.9"
+            app:cardCornerRadius="40dp">
+
+            <ImageView
+                android:id="@+id/imgComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_baseline_person"
+                android:scaleType="fitCenter" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/txtCommentText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/view2"
+            android:maxLines="2"
+            android:padding="15dp"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextClock
+            android:id="@+id/textClock"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:text="time"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_below="@id/rel1"
+        android:background="@color/lightwhite"
+        android:orientation="horizontal" />
+
+</RelativeLayout>

@@ -10,5 +10,9 @@
     <string name="navigation_drawer_close">Navigation drawer close</string>
     <string name="no_internet_message">Please check your internet connection.</string>
     <string name="click_back_wrng_msg">Please Click Again To Exit</string>
+    
+    <string-array name="moviesList">
+        <item></item>
+    </string-array>
 
 </resources>

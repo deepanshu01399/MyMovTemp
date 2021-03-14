@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/grey_arrow"
+    android:orientation="vertical"
+    android:padding="3dp">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:id="@+id/mainRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@id/relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/grey_arrow">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?android:selectableItemBackground"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    app:cardCornerRadius="@dimen/four_dp_margin"
+                    app:cardElevation="@dimen/four_dp_margin"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="true">
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="240dp"
+                        android:layout_gravity="center"
+                        android:background="@color/grey_arrow">
+
+                        <ImageView
+                            android:id="@+id/thumnailImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/edu1"
+                            android:transitionName="sharedName" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/gradient_bg" />
+
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/RRdescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/relativeLayout"
+                android:layout_marginTop="-33dp">
+
+                <TextView
+                    android:id="@+id/txtVideoTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="ConScripts"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/txtVedioDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtVideoTitle"
+                    android:maxLines="1"
+                    android:text="Lorem ipsum is simply dummy text of the printing and typesetting industry.It has been the industry's stadard dummmy text over since the 1500s."
+                    android:textColor="@color/white"
+                    android:textSize="13dp" />
+
+                <CheckBox
+                    android:id="@+id/txtShowMore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtVedioDesc"
+                    android:button="@null"
+                    android:background="?android:selectableItemBackground"
+                    android:text="Show More >"
+                    android:textColor="@color/teal_200"
+                    android:textSize="13dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/llwatchDownload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/RRdescription"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnWatchNow"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
+                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:padding="6dp"
+                    android:text="WATCH NOW" />
+
+                <Button
+                    android:id="@+id/download"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/btnWatchNow"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
+                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:padding="10dp"
+                    android:text="DOWNLOAD" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/llwatchDownload"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/lightwhite"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:id="@+id/llMyListDownShare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/relativeLayout1"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnMyList"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
+                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:paddingTop="2dp"
+                    android:text="My List" />
+
+                <Button
+                    android:id="@+id/btnBuyNow"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
+                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:paddingTop="2dp"
+                    android:text="BUY NOW" />
+
+                <Button
+                    android:id="@+id/Share"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
+                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:paddingTop="2dp"
+                    android:text="Share" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llMyListDownShare"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/txtRelatedTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Related Video >"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_relatedVedio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtRelatedTitle"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:animateLayoutChanges="false"
+                    android:nestedScrollingEnabled="false" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/relativeLayout3"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/txtCommentTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Reviews"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/imgComment"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/txtCommentTitle"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/ic_baseline_person"
+                    android:scaleType="fitCenter" />
+
+                <EditText
+                    android:id="@+id/txtCommentText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtCommentTitle"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/imgComment"
+                    android:hint="Add a public comment.."
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textColorHint="#ccc" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/includelistviewlayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relativeLayout4"
+                android:orientation="vertical" />
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
+

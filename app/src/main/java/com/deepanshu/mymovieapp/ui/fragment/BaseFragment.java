@@ -3,15 +3,18 @@ package com.deepanshu.mymovieapp.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.deepanshu.mymovieapp.ui.activity.BaseActivity;
@@ -137,6 +140,22 @@ public abstract class BaseFragment extends Fragment implements IFragment {
     public void openHomeFromBaseFragment(Bundle bundle) {
         ((BaseActivity) getActivity()).openDashboardScreenFromBaseActivity(bundle);
 //        ((BaseActivity)getActivity()).finish();
+    }
+
+    public int getScreenWidth(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size.x;
+    }
+
+    public int getScreenHeight(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size.y;
     }
 
 

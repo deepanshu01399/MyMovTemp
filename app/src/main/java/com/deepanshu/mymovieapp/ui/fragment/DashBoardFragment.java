@@ -25,6 +25,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.deepanshu.mymovieapp.R;
 import com.deepanshu.mymovieapp.adapter.CommanMovieAdapter;
+import com.deepanshu.mymovieapp.ui.activity.MainDashBoardActivity;
 import com.deepanshu.mymovieapp.ui.module.HomePageGrpMovieView;
 import com.deepanshu.mymovieapp.ui.module.HomePageMovieView;
 import com.deepanshu.mymovieapp.ui.module.MovieViewBanner;
@@ -329,7 +330,16 @@ public class DashBoardFragment extends BaseFragment {
 
                     @Override
                     public void onClick(View view, Object object, int position) {
+                        HomePageMovieView homePageMovieView = (HomePageMovieView) object;
+
                         Toast.makeText(view.getContext(), "you clicked on: " + (position + 1), Toast.LENGTH_SHORT).show();
+
+                        BaseFragment movieDetailFragment = new MovieDetailFragment();
+                        Bundle bundle=new Bundle();
+                        bundle.putInt("imageurl",homePageMovieView.getImages());
+                        bundle.putInt("movieProgress",homePageMovieView.getMovieProgress());
+                        movieDetailFragment.setArguments(bundle);
+                        ((MainDashBoardActivity) getActivity()).replaceFragment(movieDetailFragment, getChildFragmentManager(), true);
 
                     }
                 });
