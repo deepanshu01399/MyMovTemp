@@ -14,5 +14,13 @@
     <string-array name="moviesList">
         <item></item>
     </string-array>
+    <string name="dummy_text">
+       Inspired by the onscreen character he has portrayed in his latest outing Naa Peru Surya – Naa Illu India,
+        actor Allu Arjun has revealed that he is eager to join the Indian Army soon.
+        “We have shot the film in real locations with real soldiers. I have done many films in the past but the respect
+        I have earned after playing a soldier’s role in Naa Peru Surya made me feel proud. I had applied to join as an honorary
+        member of our Army and I’m hoping to get a nod from the officials.
+        That’s my only wish after I decided to do this film,” said Allu Arjun on the sidelines of a special
+        premiere for the Army personnel in Hyderabad.  </string>
 
 </resources>

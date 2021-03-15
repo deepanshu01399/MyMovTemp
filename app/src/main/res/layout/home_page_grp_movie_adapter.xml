@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
+    android:background="@color/black_white_backgound"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -13,7 +14,7 @@
             android:id="@+id/txtHorizontalViewTitle"
             android:text="Continue watching"
             android:textSize="16dp"
-            android:textColor="@color/grey_text"
+            android:textColor="@color/black_white_txt"
             android:layout_centerInParent="true"
             android:fontFamily="sans-serif-medium"
             android:layout_width="wrap_content"

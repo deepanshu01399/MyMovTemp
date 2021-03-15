@@ -22,6 +22,7 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
+            android:background="@color/black_white_backgound"
             android:layout_height="wrap_content">
 
             <ImageView
@@ -29,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
+                android:transitionName="example_transition"
                 android:src="@drawable/edu2" />
 
             <ProgressBar
@@ -37,10 +39,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="4dp"
                 android:layout_marginTop="5dp"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/black_white_txt"
                 android:progressBackgroundTint="@color/light_sky_blue"
                 android:layout_below="@+id/horizontal_image_view"
-                android:background="@color/grey"
+                android:background="@color/black_white_txt"
                 android:visibility="visible" />
 
         </RelativeLayout>

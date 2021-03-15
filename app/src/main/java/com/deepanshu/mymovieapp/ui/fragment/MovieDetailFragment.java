@@ -2,10 +2,9 @@ package com.deepanshu.mymovieapp.ui.fragment;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.format.DateUtils;
+import android.transition.TransitionManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +55,7 @@ public class MovieDetailFragment extends BaseFragment implements View.OnClickLis
     private TextView txtCommentText;
     private ArrayList<HomePageMovieView> arrayList = new ArrayList<>();
     private LinearLayout includelistviewlayout;
-
+    private RelativeLayout RRdescription,detaillayout;
     private int imageurl = 0, movieProgress = 0;
 
     public MovieDetailFragment() {
@@ -100,7 +100,8 @@ public class MovieDetailFragment extends BaseFragment implements View.OnClickLis
         txtCommentText = view.findViewById(R.id.txtCommentText);
         recyclerRelatedVedio = view.findViewById(R.id.recycler_relatedVedio);
         includelistviewlayout=view.findViewById(R.id.includelistviewlayout);
-
+        RRdescription = view.findViewById(R.id.RRdescription);
+        detaillayout = view.findViewById(R.id.detaillayout);
         thumnailImage.setImageResource(imageurl);
         txtVideoTitle.setText("" + movieProgress);
         setRecentlyRecylerView();
@@ -208,10 +209,12 @@ public class MovieDetailFragment extends BaseFragment implements View.OnClickLis
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
             txtVedioDesc.setLayoutParams(params);
+            animate();
 
         } else {
             txtVedioDesc.setMaxLines(2);
             txtShowMore.setText("Show More >");
+            animate();
 
         }
     }
@@ -279,4 +282,13 @@ public class MovieDetailFragment extends BaseFragment implements View.OnClickLis
         }
         return true;
     }
+
+    private void animate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if(detaillayout!=null)
+                TransitionManager.beginDelayedTransition(detaillayout); // this line for expanding view
+        }
+    }
+
+
 }

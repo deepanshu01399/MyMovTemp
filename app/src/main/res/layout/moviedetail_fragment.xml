@@ -1,73 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_arrow"
-    android:orientation="vertical"
-    android:padding="3dp">
+    android:fitsSystemWindows="true"
+    android:background="@color/black_white_backgound"
+    tools:context=".ui.activity.MainDashBoardActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            app:contentScrim="@color/grey_arrow"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap"
+            >
+
+            <ImageView
+                android:id="@+id/thumnailImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/edu2"
+                app:layout_collapseMode="parallax" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_bg" />
+
+            <!--            <androidx.appcompat.widget.Toolbar-->
+            <!--                android:id="@+id/toolbar"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="?attr/actionBarSize"-->
+            <!--                app:layout_collapseMode="pin"-->
+            <!--                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
-            android:id="@+id/mainRelativeLayout"
+            android:id="@+id/detaillayout"
+            android:paddingHorizontal="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:id="@id/relativeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/grey_arrow">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?android:selectableItemBackground"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    app:cardCornerRadius="@dimen/four_dp_margin"
-                    app:cardElevation="@dimen/four_dp_margin"
-                    app:cardPreventCornerOverlap="false"
-                    app:cardUseCompatPadding="true">
-
-                    <RelativeLayout
-                        android:id="@+id/relativeLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="240dp"
-                        android:layout_gravity="center"
-                        android:background="@color/grey_arrow">
-
-                        <ImageView
-                            android:id="@+id/thumnailImage"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/edu1"
-                            android:transitionName="sharedName" />
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/gradient_bg" />
-
-
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
-
-            </RelativeLayout>
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:id="@+id/RRdescription"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/relativeLayout"
-                android:layout_marginTop="-33dp">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/txtVideoTitle"
@@ -75,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:text="ConScripts"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black_white_txt"
                     android:textSize="20dp" />
 
                 <TextView
@@ -83,9 +76,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtVideoTitle"
-                    android:maxLines="1"
-                    android:text="Lorem ipsum is simply dummy text of the printing and typesetting industry.It has been the industry's stadard dummmy text over since the 1500s."
-                    android:textColor="@color/white"
+                    android:maxLines="2"
+                    android:text="@string/dummy_text"
+                    android:textColor="@color/black_white_txt"
                     android:textSize="13dp" />
 
                 <CheckBox
@@ -93,10 +86,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtVedioDesc"
-                    android:button="@null"
                     android:background="?android:selectableItemBackground"
+                    android:button="@null"
                     android:text="Show More >"
-                    android:textColor="@color/teal_200"
+                    android:textColor="@color/light_sky_blue"
                     android:textSize="13dp" />
 
             </RelativeLayout>
@@ -118,8 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30dp"
                     android:background="@drawable/state_on_off_btn_selector"
-                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
-                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:drawableRight="@drawable/state_on_off_img_selector"
                     android:padding="6dp"
                     android:text="WATCH NOW" />
 
@@ -130,8 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/btnWatchNow"
                     android:background="@drawable/state_on_off_btn_selector"
-                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
-                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:drawableRight="@drawable/ic_download"
                     android:padding="10dp"
                     android:text="DOWNLOAD" />
             </RelativeLayout>
@@ -162,7 +153,6 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/state_on_off_btn_selector"
-                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
                     android:drawableRight="@drawable/ic_baseline_person"
                     android:paddingTop="2dp"
                     android:text="My List" />
@@ -175,8 +165,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/state_on_off_btn_selector"
-                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
-                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:drawableRight="@drawable/ic_baseline_shopping"
                     android:paddingTop="2dp"
                     android:text="BUY NOW" />
 
@@ -186,10 +175,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
+                    android:gravity="center"
                     android:layout_weight="1"
                     android:background="@drawable/state_on_off_btn_selector"
-                    android:drawableLeft="@drawable/ic_baseline_arrow_back"
-                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:drawableRight="@drawable/ic_baseline_share"
                     android:paddingTop="2dp"
                     android:text="Share" />
 
@@ -238,7 +227,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="Reviews"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black_white_txt"
                     android:textSize="16sp" />
 
                 <ImageView
@@ -247,6 +236,7 @@
                     android:layout_height="40dp"
                     android:layout_below="@id/txtCommentTitle"
                     android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/black_white_txt"
                     android:background="@drawable/ic_baseline_person"
                     android:scaleType="fitCenter" />
 
@@ -261,8 +251,8 @@
                     android:hint="Add a public comment.."
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textColorHint="#ccc" />
+                    android:textColor="@color/black_white_txt"
+                    android:textColorHint="@color/black_white_hint" />
 
             </RelativeLayout>
 
@@ -273,7 +263,10 @@
                 android:layout_below="@+id/relativeLayout4"
                 android:orientation="vertical" />
 
-        </RelativeLayout>
-    </androidx.core.widget.NestedScrollView>
-</LinearLayout>
 
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
