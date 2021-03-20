@@ -1,13 +1,23 @@
 package com.deepanshu.mymovieapp.ui.module;
 
 public class HomePageMovieView {
-    int images;
-    int movieProgress;
+    private int thumnailImages;
+    private int movieProgress;
+    private String vedioUrl;
 
-    public HomePageMovieView(int images, int movieProgress) {
-        this.images = images;
+
+    public String getVedioUrl() {
+        return vedioUrl;
+    }
+
+    public void setVedioUrl(String vedioUrl) {
+        this.vedioUrl = vedioUrl;
+    }
+
+    public HomePageMovieView(int thumnailImages, int movieProgress, String vedioUrl) {
+        this.thumnailImages = thumnailImages;
         this.movieProgress = movieProgress;
-
+        this.vedioUrl = vedioUrl;
     }
 
     public int getMovieProgress() {
@@ -18,12 +28,12 @@ public class HomePageMovieView {
         this.movieProgress = movieProgress;
     }
 
-    public int getImages() {
-        return images;
+    public int getThumbNailImages() {
+        return thumnailImages;
     }
 
-    public void setImages(int images) {
-        this.images = images;
+    public void setThumbNamilImages(int images) {
+        this.thumnailImages = images;
     }
 
 }

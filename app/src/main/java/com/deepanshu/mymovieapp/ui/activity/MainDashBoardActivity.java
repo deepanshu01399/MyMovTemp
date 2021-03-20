@@ -9,15 +9,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.transition.TransitionManager;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,7 +52,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
     public FragmentManager mFragmentManager;
     public static String TAG = "MainDashBoard";
     boolean doubleTabBackButton = false;
-    private  Boolean isAbleToAddOnStack = false;
+    private Boolean isAbleToAddOnStack = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
 
     }
 
-    public MainDashBoardActivity(){
+    public MainDashBoardActivity() {
 
     }
 
@@ -147,7 +152,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
 
     @Override
     public void manageToolBar() {
-        View app_bar =findViewById(R.id.app_bar_toolbar);
+        View app_bar = findViewById(R.id.app_bar_toolbar);
         toolbar = app_bar.findViewById(R.id.includeToolbar);
         setSupportActionBar(toolbar);
         toolbar.findViewById(R.id.txtBack).setVisibility(View.GONE);
@@ -185,7 +190,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                 Intent intent = new Intent(this, GlobalDetail.class);
                 intent.putExtras(bundle);
                 */
-               // Intent intent = new Intent(MainDashBoardActivity.this, GlobalSearchActivity.class);
+                // Intent intent = new Intent(MainDashBoardActivity.this, GlobalSearchActivity.class);
                 //startActivity(intent);
                 //return true;
 
@@ -221,8 +226,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
     }
 
 
-
-        @Override
+    @Override
     public void onNetworkChangeStatus(boolean networkStatus, String msg) {
 
     }
@@ -251,23 +255,24 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
     public void onNetworkChange(boolean networkStatus, String msg) {
 
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.dashboard:
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    currentFragment = new DashBoardFragment();
-                    break;
-                case R.id.profile:
-                    currentFragment = new ProfileFragment();
-                    break;
-                default:
-                    currentFragment = new DashBoardFragment();
-            }
+        switch (item.getItemId()) {
+            case R.id.dashboard:
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                currentFragment = new DashBoardFragment();
+                break;
+            case R.id.profile:
+                currentFragment = new ProfileFragment();
+                break;
+            default:
+                currentFragment = new DashBoardFragment();
+        }
 //            if (currentFragment != null && item.getItemId()== R.id.profile) {
 //                 replaceFragment(currentFragment, getSupportFragmentManager(), isAbleToAddOnStack);
 //            }else
-                replaceFragment(currentFragment, getSupportFragmentManager(), true);
+        replaceFragment(currentFragment, getSupportFragmentManager(), true);
 
         return true;
     }
@@ -354,6 +359,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                     }
                 });
     }
+
     private void closeDrawer() {
         try {
             if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -391,7 +397,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
         } else {
             FragmentManager fragmentManager = getSupportFragmentManager();
             int backEntryCount = fragmentManager.getBackStackEntryCount() - 1;
-            Log.e(TAG,"PagesOnBackStack :"+backEntryCount);
+            Log.e(TAG, "PagesOnBackStack :" + backEntryCount);
             if (backEntryCount == 0) {
                 if (doubleTabBackButton) {
                     //super.onBackPressed();
@@ -416,8 +422,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                     fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                     isAbleToAddOnStack = false;
                     bottomNavigationView.setSelectedItemId(R.id.dashboard);
-                }
-                else {
+                } else {
                     BaseFragment f = (BaseFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                     super.onBackPressed();
                     //getFragmentManager().popBackStack();
@@ -430,4 +435,40 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
         }
     }
 
+
+    public void chekcAndRotateScreen() {
+      /*  Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+        final int orientation1 = display.getOrientation();
+        int orientation2 = getRequestedOrientation(); // inside an Activity
+        int orientation = this.getResources().getConfiguration().orientation;
+        Toast.makeText(this, "orientation1:"+orientation+" orinetation2:"+orientation1+" orinetation:"+orientation, Toast.LENGTH_SHORT).show();
+        switch(orientation) {
+            case Configuration.ORIENTATION_PORTRAIT:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+            case Configuration.ORIENTATION_LANDSCAPE:
+                setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+        }
+
+    }*/
+        int orientation = MainDashBoardActivity.this.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            //showMediaDescription();
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            // hideMediaDescription();
+        }
+        if (Settings.System.getInt(getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION, 0) == 1) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                }
+            }, 4000);
+        }
+    }
 }

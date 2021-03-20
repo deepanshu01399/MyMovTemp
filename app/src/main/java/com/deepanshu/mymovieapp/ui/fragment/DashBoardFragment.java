@@ -17,8 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +30,6 @@ import com.deepanshu.mymovieapp.ui.module.HomePageGrpMovieView;
 import com.deepanshu.mymovieapp.ui.module.HomePageMovieView;
 import com.deepanshu.mymovieapp.ui.module.MovieViewBanner;
 import com.deepanshu.mymovieapp.ui.module.RecyclerViewOverScrollDecorAdapter;
-import com.deepanshu.mymovieapp.ui.module.ZoomOutPageTransformer;
 import com.deepanshu.mymovieapp.viewpager.HomeScreenHeaderViewPager;
 
 import java.util.ArrayList;
@@ -225,7 +222,7 @@ public class DashBoardFragment extends BaseFragment {
                 HomePageMovieView homePageMovieView = (HomePageMovieView) object;
 
                 ImageView horizontalImageView = view.findViewById(R.id.horizontal_image_view);
-                horizontalImageView.setImageResource(homePageMovieView.getImages());
+                horizontalImageView.setImageResource(homePageMovieView.getThumbNailImages());
 
                 ProgressBar howMuchVedioSeenProgresss = view.findViewById(R.id.howMuchVedioSeenProgresss);
                 howMuchVedioSeenProgresss.setVisibility(View.GONE);
@@ -310,7 +307,7 @@ public class DashBoardFragment extends BaseFragment {
                         HomePageMovieView homePageMovieView = (HomePageMovieView) object;
 
                         ImageView horizontalImageView = view.findViewById(R.id.horizontal_image_view);
-                        horizontalImageView.setImageResource(homePageMovieView.getImages());
+                        horizontalImageView.setImageResource(homePageMovieView.getThumbNailImages());
 
                         ProgressBar howMuchVedioSeenProgresss = view.findViewById(R.id.howMuchVedioSeenProgresss);
                         //howMuchVedioSeenProgresss.setMax(100); // 100 maximum value for the progress value
@@ -333,13 +330,13 @@ public class DashBoardFragment extends BaseFragment {
                     @Override
                     public void onClick(View view, Object object, int position) {
                         HomePageMovieView homePageMovieView = (HomePageMovieView) object;
-
                         Toast.makeText(view.getContext(), "you clicked on: " + (position + 1), Toast.LENGTH_SHORT).show();
 
                         BaseFragment movieDetailFragment = new MovieDetailFragment();
                         Bundle bundle=new Bundle();
-                        bundle.putInt("imageurl",homePageMovieView.getImages());
+                        bundle.putInt("imageurl",homePageMovieView.getThumbNailImages());
                         bundle.putInt("movieProgress",homePageMovieView.getMovieProgress());
+                        bundle.putString("movieUrl",homePageMovieView.getVedioUrl());
                         movieDetailFragment.setArguments(bundle);
                         ((MainDashBoardActivity) getActivity()).replaceFragment(movieDetailFragment, getChildFragmentManager(), true);
 
@@ -383,14 +380,14 @@ public class DashBoardFragment extends BaseFragment {
 
     private void initShowMovieView() {
         arrayList.clear();
-        arrayList.add(new HomePageMovieView(R.drawable.edu1, 60));
-        arrayList.add(new HomePageMovieView(R.drawable.edu2, 20));
-        arrayList.add(new HomePageMovieView(R.drawable.edu3, 30));
-        arrayList.add(new HomePageMovieView(R.drawable.edu4, 10));
-        arrayList.add(new HomePageMovieView(R.drawable.edu5, 0));
-        arrayList.add(new HomePageMovieView(R.drawable.edu6, 100));
-        arrayList.add(new HomePageMovieView(R.drawable.edu1, 70));
-        arrayList.add(new HomePageMovieView(R.drawable.edu2, 40));
+        arrayList.add(new HomePageMovieView(R.drawable.edu1, 60,"https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+        arrayList.add(new HomePageMovieView(R.drawable.edu2, 20,"https://media.w3.org/2010/05/sintel/trailer.mp4"));
+        arrayList.add(new HomePageMovieView(R.drawable.edu3, 30,"http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
+        arrayList.add(new HomePageMovieView(R.drawable.edu4, 10,"https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
+        arrayList.add(new HomePageMovieView(R.drawable.edu5, 0,"https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+        arrayList.add(new HomePageMovieView(R.drawable.edu6, 100,"https://media.w3.org/2010/05/sintel/trailer.mp4"));
+        arrayList.add(new HomePageMovieView(R.drawable.edu1, 70,"http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
+        arrayList.add(new HomePageMovieView(R.drawable.edu2, 40,"https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
     }
 
     private void initShowMovieViewVertically() {
