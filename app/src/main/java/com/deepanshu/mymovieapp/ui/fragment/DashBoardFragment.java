@@ -2,6 +2,7 @@ package com.deepanshu.mymovieapp.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.deepanshu.mymovieapp.R;
 import com.deepanshu.mymovieapp.adapter.CommanMovieAdapter;
 import com.deepanshu.mymovieapp.ui.activity.MainDashBoardActivity;
+import com.deepanshu.mymovieapp.ui.activity.MovieDetailActvity;
 import com.deepanshu.mymovieapp.ui.module.HomePageGrpMovieView;
 import com.deepanshu.mymovieapp.ui.module.HomePageMovieView;
 import com.deepanshu.mymovieapp.ui.module.MovieViewBanner;
@@ -332,13 +334,16 @@ public class DashBoardFragment extends BaseFragment {
                         HomePageMovieView homePageMovieView = (HomePageMovieView) object;
                         Toast.makeText(view.getContext(), "you clicked on: " + (position + 1), Toast.LENGTH_SHORT).show();
 
-                        BaseFragment movieDetailFragment = new MovieDetailFragment();
+                        //MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
+                        Intent intent = new Intent(getContext(),MovieDetailActvity.class);
                         Bundle bundle=new Bundle();
                         bundle.putInt("imageurl",homePageMovieView.getThumbNailImages());
                         bundle.putInt("movieProgress",homePageMovieView.getMovieProgress());
                         bundle.putString("movieUrl",homePageMovieView.getVedioUrl());
-                        movieDetailFragment.setArguments(bundle);
-                        ((MainDashBoardActivity) getActivity()).replaceFragment(movieDetailFragment, getChildFragmentManager(), true);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent,20,bundle);
+                        //movieDetailFragment.setArguments(bundle);
+                        //((MainDashBoardActivity) getActivity()).replaceFragment(movieDetailFragment, getChildFragmentManager(), true);
 
                     }
                 });

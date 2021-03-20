@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.deepanshu.mymovieapp.R;
+import com.deepanshu.mymovieapp.ui.activity.MainDashBoardActivity;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -205,11 +206,13 @@ public  class ProfileFragment extends  BaseFragment implements View.OnClickListe
                 //check conditons:
                 if(flag){
                     //when flag is true --> set orientation or enter to full screen else in half screen
+                    ((MainDashBoardActivity)getActivity()).visibleHideBottomNavigation(flag);
                     fullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen));
                     getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     flag = false;
                 }
                 else{
+                    ((MainDashBoardActivity)getActivity()).visibleHideBottomNavigation(flag);
                     fullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen_exit));
                     getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     flag = true;

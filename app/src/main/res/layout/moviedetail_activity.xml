@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_white_backgound"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.activity.MainDashBoardActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarlayout"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            app:contentScrim="@color/grey_arrow"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap">
+
+            <ImageView
+                android:id="@+id/thumnailImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/edu2"
+                app:layout_collapseMode="parallax" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true">
+
+
+                <com.google.android.exoplayer2.ui.PlayerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/player_view"
+                    app:resize_mode="fit"
+                    app:hide_on_touch="true"
+                    app:show_timeout="5000"
+                    app:rewind_increment="1000"
+                    app:fastforward_increment="1000"
+                    app:use_controller="true"
+                    android:background="@android:color/background_dark"
+                    app:player_layout_id="@layout/exo_simple_player_view"
+                    app:controller_layout_id="@layout/custom_controller"
+                    />
+
+                <ProgressBar
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerInParent="true"
+                    android:progressBackgroundTint="@color/white"
+                    android:id="@+id/progress_bar"/>
+            </RelativeLayout>
+
+<!--
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_bg" />
+
+            <include
+                layout="@layout/vedio_btn_layout" />
+-->
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:id="@+id/detaillayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp">
+
+
+            <RelativeLayout
+                android:id="@+id/RRdescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtVideoTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="ConScripts"
+                    android:textColor="@color/black_white_txt"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/txtVedioDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtVideoTitle"
+                    android:maxLines="2"
+                    android:text="@string/dummy_text"
+                    android:textColor="@color/black_white_txt"
+                    android:textSize="13dp" />
+
+                <CheckBox
+                    android:id="@+id/txtShowMore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtVedioDesc"
+                    android:background="?android:selectableItemBackground"
+                    android:button="@null"
+                    android:text="Show More >"
+                    android:textColor="@color/light_sky_blue"
+                    android:textSize="13dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/llwatchDownload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/RRdescription"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnWatchNow"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableRight="@drawable/state_on_off_img_selector"
+                    android:padding="6dp"
+                    android:text="WATCH NOW" />
+
+                <Button
+                    android:id="@+id/download"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/btnWatchNow"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableRight="@drawable/ic_download"
+                    android:padding="10dp"
+                    android:text="PAUSE" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/llwatchDownload"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/lightwhite"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:id="@+id/llMyListDownShare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/relativeLayout1"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnMyList"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight=".52"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableRight="@drawable/ic_baseline_person"
+                    android:text="RESTART NOW" />
+
+                <Button
+                    android:id="@+id/btnBuyNow"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight=".34"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableRight="@drawable/ic_baseline_shopping"
+                    android:text="STOP" />
+
+                <Button
+                    android:id="@+id/Share"
+                    style="@style/btnTextAnimation1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight=".34"
+                    android:background="@drawable/state_on_off_btn_selector"
+                    android:drawableRight="@drawable/ic_baseline_share"
+                    android:gravity="center"
+                    android:text="Share" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/llMyListDownShare"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/txtRelatedTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Related Video >"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_relatedVedio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtRelatedTitle"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:animateLayoutChanges="false"
+                    android:nestedScrollingEnabled="false" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/relativeLayout3"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/txtCommentTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Reviews"
+                    android:textColor="@color/black_white_txt"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/imgComment"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/txtCommentTitle"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/ic_baseline_person"
+                    android:backgroundTint="@color/black_white_txt"
+                    android:scaleType="fitCenter" />
+
+                <EditText
+                    android:id="@+id/txtCommentText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtCommentTitle"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/imgComment"
+                    android:hint="Add a public comment.."
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
+                    android:textColor="@color/black_white_txt"
+                    android:textColorHint="@color/black_white_hint" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/includelistviewlayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relativeLayout4"
+                android:orientation="vertical" />
+
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

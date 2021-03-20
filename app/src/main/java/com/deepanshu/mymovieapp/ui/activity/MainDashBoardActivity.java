@@ -471,4 +471,14 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
             }, 4000);
         }
     }
+
+    public void visibleHideBottomNavigation(Boolean makeVisible){
+        if(makeVisible)
+        bottomNavigationView.setVisibility(View.VISIBLE);
+        else{
+            bottomNavigationView.setVisibility(View.GONE);
+        }
+
+    }
+
 }
