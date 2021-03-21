@@ -5,6 +5,54 @@
     android:layout_height="match_parent"
     android:background="#80000000">
 
+
+    <RelativeLayout
+        android:id="@+id/videoHeaderRelLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/exo_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="title"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/ic_arrow_down"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/menu_dots"
+                android:layout_width="wrap_content"
+                android:layout_gravity="end"
+                android:layout_alignParentEnd="true"
+                android:background="?android:selectableItemBackground"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_lock"
+                />
+
+    </RelativeLayout>
+    <SeekBar
+        android:id="@+id/volumneSeekbar"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:visibility="gone"
+        android:layout_marginTop="37dp"
+        />
+    <SeekBar
+        android:id="@+id/brightNessSeekbar"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:max="255"
+        android:visibility="gone"
+        android:indeterminate="false"
+        android:layout_marginTop="69dp"
+        />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,7 +103,6 @@
 
 
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"

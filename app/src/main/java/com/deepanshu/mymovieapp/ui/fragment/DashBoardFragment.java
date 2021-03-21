@@ -3,6 +3,7 @@ package com.deepanshu.mymovieapp.ui.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -184,6 +185,7 @@ public class DashBoardFragment extends BaseFragment {
 
     private void initView(View view) {
 
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         viewpager = (ViewPager) view.findViewById(R.id.viewpager);
         llPagerDots = view.findViewById(R.id.pager_dots);
         verticalRecyclerView = (RecyclerView) view.findViewById(R.id.my_verical_recycler_view);
@@ -337,9 +339,13 @@ public class DashBoardFragment extends BaseFragment {
                         //MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
                         Intent intent = new Intent(getContext(),MovieDetailActvity.class);
                         Bundle bundle=new Bundle();
+                        bundle.putParcelable("detailedCLickedMovie",homePageMovieView);
+                        /*// if we want to send data in string or int formate ... and above line is for if we want to send whole class
                         bundle.putInt("imageurl",homePageMovieView.getThumbNailImages());
                         bundle.putInt("movieProgress",homePageMovieView.getMovieProgress());
                         bundle.putString("movieUrl",homePageMovieView.getVedioUrl());
+                        */
+                        bundle.putInt("movielistPosition",position);
                         intent.putExtras(bundle);
                         startActivityForResult(intent,20,bundle);
                         //movieDetailFragment.setArguments(bundle);
@@ -385,14 +391,15 @@ public class DashBoardFragment extends BaseFragment {
 
     private void initShowMovieView() {
         arrayList.clear();
-        arrayList.add(new HomePageMovieView(R.drawable.edu1, 60,"https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu2, 20,"https://media.w3.org/2010/05/sintel/trailer.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu3, 30,"http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu4, 10,"https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu5, 0,"https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu6, 100,"https://media.w3.org/2010/05/sintel/trailer.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu1, 70,"http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu2, 40,"https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
+        arrayList.add(new HomePageMovieView("Panchayat",R.drawable.edu1,40,"https://imgur.com/7bMqysJ.mp4"));
+        arrayList.add(new HomePageMovieView("Bunny-Rabit",R.drawable.edu4, 60, "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+        arrayList.add(new HomePageMovieView("Chiness",R.drawable.edu2, 20,"https://media.w3.org/2010/05/sintel/trailer.mp4"));
+        arrayList.add(new HomePageMovieView("Natural-view",R.drawable.edu3, 30,"http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
+        arrayList.add(new HomePageMovieView("Chota-Bheem",R.drawable.edu4, 10,"https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
+        arrayList.add(new HomePageMovieView("Motu-patlu",R.drawable.edu5, 0,"https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+        arrayList.add(new HomePageMovieView("JL-50",R.drawable.edu6, 100,"https://media.w3.org/2010/05/sintel/trailer.mp4"));
+        arrayList.add(new HomePageMovieView("Bhahuballi",R.drawable.edu1, 70,"http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
+        arrayList.add(new HomePageMovieView("Godzilla v/s Kong ",R.drawable.edu2, 40,"https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
     }
 
     private void initShowMovieViewVertically() {

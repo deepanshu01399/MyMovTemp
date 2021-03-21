@@ -1,34 +1,31 @@
 package com.deepanshu.mymovieapp.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -37,7 +34,6 @@ import android.widget.SeekBar;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,14 +41,13 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.deepanshu.mymovieapp.R;
 import com.deepanshu.mymovieapp.adapter.CommanMovieAdapter;
 import com.deepanshu.mymovieapp.interfaces.FragmentChangeListener;
-import com.deepanshu.mymovieapp.ui.custom.ColoredSnackbar;
+import com.deepanshu.mymovieapp.ui.custom.OnSwipeTouchListner;
 import com.deepanshu.mymovieapp.ui.fragment.BaseFragment;
 import com.deepanshu.mymovieapp.ui.module.CommentModule;
 import com.deepanshu.mymovieapp.ui.module.HomePageMovieView;
@@ -69,6 +64,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -89,13 +85,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import me.everything.android.ui.overscroll.HorizontalOverScrollBounceEffectDecorator;
 
 import static com.deepanshu.mymovieapp.util.StaticUtil.getScreenHeight;
 import static com.deepanshu.mymovieapp.util.StaticUtil.getScreenWidth;
 
-public  class MovieDetailActvity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener, TextView.OnEditorActionListener {
+public class MovieDetailActvity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener, TextView.OnEditorActionListener {
     private ImageView thumnailImage;
     private TextView txtVideoTitle, txtVedioDesc;
     private CheckBox txtShowMore;
@@ -103,10 +100,9 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
     private TextView txtCommentText;
     private ArrayList<HomePageMovieView> arrayList = new ArrayList<>();
     private LinearLayout includelistviewlayout;
-    private RelativeLayout RRdescription, detaillayout, videolayoutBtns;
-    private int imageurl = 0, movieProgress = 0;
-    private String movieUrl;
-    private SeekBar seekBar;
+    private RelativeLayout RRdescription, detaillayout, videolayoutBtns, videoHeaderRelLayout;
+    private int imageurl = 0, movieProgress = 0, moviePosition = 0;
+    private String movieUrl, movieTitle;
     private static String TAG = "MovieDetailFrag";
     private String MEDIA_PATH = Environment.getExternalStorageDirectory().getPath() + "/storage/emulated/0/WhatsApp/Media/WhatsApp Video/VID-20210228-WA0011.mp4";
     private Button btnWatchNow, download, btnMyList, btnBuyNow;
@@ -117,8 +113,17 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
     private ProgressBar progressBar;
     private ImageView fullScreen;
     private SimpleExoPlayer simpleExoPlayer;
-    private Boolean flag = false;
+    private Boolean wantsTOExit = false;
+    private Boolean currentlyOnLandscapeMode = false;
     private CollapsingToolbarLayout collapsingToolbarlayout;
+    private HomePageMovieView homePageMovieViewDetailData;
+    int lastWindowIndex = 0; // global var in your class encapsulating exoplayer obj (Activity, etc.)
+    private View exo_pause;
+    private TextView exo_title;
+    private AudioManager audioManager;
+    private SeekBar volumeSeekBar,brightNessSeekbar;
+
+
 
 
     @Override
@@ -133,10 +138,18 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
 
     private void getBundleData() {
         Intent intent = getIntent();
-        if(intent.getExtras()!=null) {
-            imageurl = intent.getExtras().getInt("imageurl");
+        if (intent.getExtras() != null) {
+           /* imageurl = intent.getExtras().getInt("imageurl");
             movieUrl = intent.getStringExtra("movieUrl");
             movieProgress = intent.getExtras().getInt("movieProgress");
+           */
+            //to get data from a  parceble intent
+            homePageMovieViewDetailData = intent.getParcelableExtra("detailedCLickedMovie");
+            imageurl = homePageMovieViewDetailData.getThumbNailImages();
+            movieUrl = homePageMovieViewDetailData.getVedioUrl();
+            movieProgress = homePageMovieViewDetailData.getMovieProgress();
+            movieTitle = homePageMovieViewDetailData.getMovieName();
+            moviePosition = intent.getExtras().getInt("movielistPosition");
         }
 
     }
@@ -153,16 +166,16 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
 
     @Override
     public void getViewById() {
-        initMovieHeaderView();
         getBundleData();
+        initMovieHeaderView();
         playerView = findViewById(R.id.player_view);
-        progressBar =findViewById(R.id.progress_bar);
+        progressBar = findViewById(R.id.progress_bar);
         fullScreen = findViewById(R.id.bt_fullScreen);
         fullScreen.setOnClickListener(this);
         thumnailImage = findViewById(R.id.thumnailImage);
         txtVideoTitle = findViewById(R.id.txtVideoTitle);
         txtShowMore = findViewById(R.id.txtShowMore);
-        txtVedioDesc =findViewById(R.id.txtVedioDesc);
+        txtVedioDesc = findViewById(R.id.txtVedioDesc);
         txtCommentText = findViewById(R.id.txtCommentText);
         recyclerRelatedVedio = findViewById(R.id.recycler_relatedVedio);
         includelistviewlayout = findViewById(R.id.includelistviewlayout);
@@ -173,15 +186,49 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
         btnMyList = findViewById(R.id.btnMyList);
         btnBuyNow = findViewById(R.id.btnBuyNow);
         collapsingToolbarlayout = findViewById(R.id.collapsingToolbarlayout);
-
+        exo_title = findViewById(R.id.exo_title);
+        videoHeaderRelLayout = findViewById(R.id.videoHeaderRelLayout);
         thumnailImage.setImageResource(imageurl);
-        txtVideoTitle.setText("" + movieProgress);
+        txtVideoTitle.setText(movieTitle);
+        exo_title.setText(movieTitle);
 
         checkPermission();
         setonClickListner();
         setRecentlyRecylerView();
 
+        //dummyAudioScrolling();
+
+        //dummyBrightNessScrolling();
+
+
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN){
+            try {
+                volumeSeekBar.setProgress(audioManager.getStreamVolume(simpleExoPlayer.getAudioStreamType()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP){
+            try {
+                volumeSeekBar.setProgress(audioManager.getStreamVolume(simpleExoPlayer.getAudioStreamType()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
 
 
     private void setonClickListner() {
@@ -192,55 +239,76 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
         btnMyList.setOnClickListener(this);
         btnWatchNow.setOnClickListener(this);
         download.setOnClickListener(this);
+        videoHeaderRelLayout.setVisibility(View.GONE);
         //todo make window full screen
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
         //video url
-        Uri  videoUrl = Uri.parse("https://imgur.com/7bMqysJ.mp4");
+        //Uri  videoUrl = Uri.parse("https://imgur.com/7bMqysJ.mp4");
         //initalise load control
         LoadControl loadControl = new DefaultLoadControl();
         //initialise Band width
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         //intialise the track selector
-        TrackSelector  trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+        TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
         //initialsie simple exo player
-        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(MovieDetailActvity.this,trackSelector,loadControl);
-        //Initialsie dataa   source factory
+        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(MovieDetailActvity.this, trackSelector, loadControl);
+        //Initialsie data source factory used for setting http url files
         DefaultHttpDataSourceFactory defaultHttpDataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
         //initalise extractors factory
-        ExtractorsFactory extractorsFactory  = new DefaultExtractorsFactory();
+        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         //initalise  media source
-        MediaSource mediaSource = new ExtractorMediaSource(videoUrl,defaultHttpDataSourceFactory,extractorsFactory,null,null);
-        //set player
+
+        //MediaSource mediaSource = new ExtractorMediaSource(videoUrl,defaultHttpDataSourceFactory,extractorsFactory,null,null);
+        //initalise Concatenating Media source
+        ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
+
+        //Ensure to populate the allArrayVideo url .
+        for (int i = 0; i < arrayList.size(); i++) {
+            String videoUrlString = arrayList.get(i).getVedioUrl();
+            Uri videoUrl = Uri.parse(videoUrlString);
+            //initalise  media source
+            MediaSource mediaSource = new ExtractorMediaSource(videoUrl, defaultHttpDataSourceFactory, extractorsFactory, null, null);
+            //adding the mediasource to the concatenatemedia source
+            concatenatingMediaSource.addMediaSource(mediaSource);
+        }
+
         playerView.setPlayer(simpleExoPlayer);
         playerView.setKeepScreenOn(true);
-        simpleExoPlayer.prepare(mediaSource);
-        //playvedio when ready
+        //simpleExoPlayer.prepare(mediaSource);
+        simpleExoPlayer.prepare(concatenatingMediaSource);// simpleExoPlayer.prepare(mediaSource);//if we want to play a single video
+        //Play from the item selected on the playlist from previous activity/fragment
+        simpleExoPlayer.seekTo(0, C.TIME_UNSET);
+        //playVedio when ready
         simpleExoPlayer.setPlayWhenReady(true);
         simpleExoPlayer.addListener(new Player.EventListener() {
             @Override
             public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
+                //Toast.makeText(MovieDetailActvity.this, "onTimelineChanged", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                //Toast.makeText(MovieDetailActvity.this, "onTracksChanged", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onLoadingChanged(boolean isLoading) {
+                // Toast.makeText(MovieDetailActvity.this, "onLoadingChanged", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                Toast.makeText(MovieDetailActvity.this, "onPlayerStateChanged", Toast.LENGTH_SHORT).show();
                 //check conditon
-                if(playbackState==Player.STATE_BUFFERING){
+                if (playbackState == Player.STATE_BUFFERING) {
                     //when buffering show progressbar
                     progressBar.setVisibility(View.VISIBLE);
-                }else if(playbackState== Player.STATE_READY){
+                } else if (playbackState == Player.STATE_READY) {
                     //when video ready hide progressbar
                     progressBar.setVisibility(View.GONE);
 
@@ -250,21 +318,33 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
 
             @Override
             public void onRepeatModeChanged(int repeatMode) {
+                Toast.makeText(MovieDetailActvity.this, "onRepeatModeChanged", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+                Toast.makeText(MovieDetailActvity.this, "onShuffleModeEnabledChanged", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onPlayerError(ExoPlaybackException error) {
+                Toast.makeText(MovieDetailActvity.this, "onPlayerError", Toast.LENGTH_SHORT).show();
+                simpleExoPlayer.stop();
 
             }
 
             @Override
             public void onPositionDiscontinuity(int reason) {
+                //Toast.makeText(MovieDetailActvity.this, "onPositionDiscontinuity", Toast.LENGTH_SHORT).show();
+
+                int latestWindowIndex = simpleExoPlayer.getCurrentWindowIndex();
+                if (latestWindowIndex != lastWindowIndex) {
+                    // item selected in playlist has changed, handle here
+                    lastWindowIndex = latestWindowIndex;
+                    // ...
+                }
 
             }
 
@@ -278,6 +358,23 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
 
             }
         });
+
+        playerView.setControllerHideOnTouch(true);
+       /* playerView.setOnTouchListener(new OnSwipeTouchListner(MovieDetailActvity.this) {
+            public void onSwipeTop() {
+                Toast.makeText(MovieDetailActvity.this, "top", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeRight() {
+                Toast.makeText(MovieDetailActvity.this, "right", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeLeft() {
+                Toast.makeText(MovieDetailActvity.this, "left", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeBottom() {
+                Toast.makeText(MovieDetailActvity.this, "bottom", Toast.LENGTH_SHORT).show();
+            }
+
+        });*/
 
 
     }
@@ -343,37 +440,32 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (simpleExoPlayer != null)
+            simpleExoPlayer.release();
+    }
 
     @Override
     public void onBackStackChanged() {
-
+        if (simpleExoPlayer != null)
+            simpleExoPlayer.stop();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_fullScreen:
-                //check conditons:
                 checkAndRotateScreen();
-
-                if(flag){
-                    //when flag is true --> set orientation or enter to full screen else in half screen
-                    fullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen));
-                    //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
-                    simpleExoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
-                    handleVideoViewLayout(flag);
-                    flag = false;
-                }
-                else{
-                    fullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen_exit));
-                    //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    handleVideoViewLayout(flag);
-
-                    flag = true;
+                if (currentlyOnLandscapeMode) {
+                    goesToPortrait();
+                    currentlyOnLandscapeMode = false;
+                } else {
+                    goesToLandScape();
+                    currentlyOnLandscapeMode = true;
                 }
                 break;
-
 
             case R.id.btnWatchNow:
 
@@ -393,17 +485,29 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
 
     }
 
-    private void handleVideoViewLayout(Boolean flag) {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            collapsingToolbarlayout.getLayoutParams().width = getScreenHeight(MovieDetailActvity.this);
-            collapsingToolbarlayout.getLayoutParams().height = getScreenWidth(MovieDetailActvity.this);
+    private void goesToLandScape() {
+        fullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen_exit));
+        videoHeaderRelLayout.setVisibility(View.VISIBLE);
 
-        } else {
-            collapsingToolbarlayout.getLayoutParams().width = getScreenHeight(MovieDetailActvity.this);
-            collapsingToolbarlayout.getLayoutParams().height = getScreenWidth(MovieDetailActvity.this)/3;
+        collapsingToolbarlayout.getLayoutParams().width = getScreenWidth(MovieDetailActvity.this);
+        collapsingToolbarlayout.getLayoutParams().height = getScreenHeight(MovieDetailActvity.this);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        MovieDetailActvity.this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE);
 
-        }
     }
+
+    private void goesToPortrait() {
+        fullScreen.setImageDrawable(getResources().getDrawable(R.drawable.ic_fullscreen));
+        playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+        simpleExoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+        videoHeaderRelLayout.setVisibility(View.GONE);
+
+        collapsingToolbarlayout.getLayoutParams().width = getScreenWidth(MovieDetailActvity.this);
+        collapsingToolbarlayout.getLayoutParams().height = getScreenHeight(MovieDetailActvity.this) / 3;
+        MovieDetailActvity.this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+    }
+
 
     public List<CommentModule> getCommentList() {
         commentModuleList = new ArrayList<CommentModule>();
@@ -441,15 +545,12 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-            MovieDetailActvity.this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |View.SYSTEM_UI_FLAG_LAYOUT_STABLE| View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE);
+            goesToLandScape();
 
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             //unhide your objects here.
             //getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-            MovieDetailActvity.this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            goesToPortrait();
 
         }
 
@@ -457,14 +558,19 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
 
     private void initMovieHeaderView() {
         arrayList.clear();
-        arrayList.add(new HomePageMovieView(R.drawable.edu1, 60, "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu2, 20, "https://media.w3.org/2010/05/sintel/trailer.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu3, 30, "http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu4, 10, "https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu5, 0, "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu6, 100, "https://media.w3.org/2010/05/sintel/trailer.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu1, 70, "http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu2, 40, "https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
+        if (homePageMovieViewDetailData != null) {
+            arrayList.add(homePageMovieViewDetailData);
+        }
+        arrayList.add(new HomePageMovieView("Panchayat", R.drawable.edu1, 40, "https://imgur.com/7bMqysJ.mp4"));
+        arrayList.add(new HomePageMovieView("Bunny-Rabit", R.drawable.edu4, 60, "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+        arrayList.add(new HomePageMovieView("Chiness", R.drawable.edu2, 20, "https://media.w3.org/2010/05/sintel/trailer.mp4"));
+        arrayList.add(new HomePageMovieView("Natural-view", R.drawable.edu3, 30, "http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
+        arrayList.add(new HomePageMovieView("Chota-Bheem", R.drawable.edu4, 10, "https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
+        arrayList.add(new HomePageMovieView("Motu-patlu", R.drawable.edu5, 0, "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+        arrayList.add(new HomePageMovieView("JL-50", R.drawable.edu6, 100, "https://media.w3.org/2010/05/sintel/trailer.mp4"));
+        arrayList.add(new HomePageMovieView("Bhahuballi", R.drawable.edu1, 70, "http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
+        arrayList.add(new HomePageMovieView("Godzilla v/s Kong ", R.drawable.edu2, 40, "https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
+
     }
 
 
@@ -497,7 +603,7 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
 
     public void setCommentData(ArrayList<CommentModule> commentModuleList) {
         for (CommentModule commentModule : commentModuleList) {
-            LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View commentView = layoutInflater.inflate(R.layout.comment_layout, null);
             TextView txtCommentText1 = commentView.findViewById(R.id.txtCommentText1);
             final TextClock textClock = commentView.findViewById(R.id.textCommentTime);
@@ -513,7 +619,18 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
 
     @Override
     public void onBackPressed() {
+        int orientation = MovieDetailActvity.this.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            return;
+        }
+        if (simpleExoPlayer != null && !wantsTOExit) {
+            simpleExoPlayer.stop();
+            wantsTOExit = true;
+            return;
+        }
         super.onBackPressed();
+
 
     }
 
@@ -556,6 +673,7 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
             }, 3000);
         }
     }
+
     private void setRecentlyRecylerView() {
         recyclerRelatedVedio.setNestedScrollingEnabled(false);
         CommanMovieAdapter commanMovieAdapterVertical = new CommanMovieAdapter(this);
@@ -653,6 +771,62 @@ public  class MovieDetailActvity extends BaseActivity implements BottomNavigatio
                 break;
         }
         return true;
+    }
+
+    private void dummyAudioScrolling() {
+        volumeSeekBar = findViewById(R.id.volumneSeekbar);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        volumeSeekBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+        volumeSeekBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                try {
+                    audioManager.setStreamVolume(simpleExoPlayer.getAudioStreamType(), i, 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, i, 0);
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
+    }
+
+    private void dummyBrightNessScrolling() {
+        brightNessSeekbar = findViewById(R.id.brightNessSeekbar);
+        int brightNesslevel = Settings.System.getInt(getContentResolver(),Settings.System.SCREEN_BRIGHTNESS,0);
+        brightNessSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Context context = getApplicationContext();
+                Boolean  canWrite= Settings.System.canWrite(context);
+                if(canWrite){
+                    int updatedBrightNess  = i*255/255;
+                    Settings.System.putInt(context.getContentResolver(),Settings.System.SCREEN_BRIGHTNESS_MODE,Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                    Settings.System.putInt(context.getContentResolver(),Settings.System.SCREEN_BRIGHTNESS,updatedBrightNess);
+                }else{
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
 

@@ -83,6 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:text="ConScripts"
+                    android:textStyle="bold"
                     android:textColor="@color/black_white_txt"
                     android:textSize="20dp" />
 
@@ -92,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtVideoTitle"
                     android:maxLines="2"
+                    android:textStyle="italic"
                     android:text="@string/dummy_text"
                     android:textColor="@color/black_white_txt"
                     android:textSize="13dp" />

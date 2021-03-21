@@ -450,14 +450,15 @@ public  class MovieDetailActvityTest extends BaseActivity implements BottomNavig
 
     private void initMovieHeaderView() {
         arrayList.clear();
-        arrayList.add(new HomePageMovieView(R.drawable.edu1, 60, "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu2, 20, "https://media.w3.org/2010/05/sintel/trailer.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu3, 30, "http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu4, 10, "https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu5, 0, "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu6, 100, "https://media.w3.org/2010/05/sintel/trailer.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu1, 70, "http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
-        arrayList.add(new HomePageMovieView(R.drawable.edu2, 40, "https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
+        arrayList.add(new HomePageMovieView("Panchayat",R.drawable.edu1,40,"https://imgur.com/7bMqysJ.mp4"));
+        arrayList.add(new HomePageMovieView("Bunny-Rabit",R.drawable.edu4, 60, "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+        arrayList.add(new HomePageMovieView("Chiness",R.drawable.edu2, 20,"https://media.w3.org/2010/05/sintel/trailer.mp4"));
+        arrayList.add(new HomePageMovieView("Natural-view",R.drawable.edu3, 30,"http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
+        arrayList.add(new HomePageMovieView("Chota-Bheem",R.drawable.edu4, 10,"https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
+        arrayList.add(new HomePageMovieView("Motu-patlu",R.drawable.edu5, 0,"https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"));
+        arrayList.add(new HomePageMovieView("JL-50",R.drawable.edu6, 100,"https://media.w3.org/2010/05/sintel/trailer.mp4"));
+        arrayList.add(new HomePageMovieView("Bhahuballi",R.drawable.edu1, 70,"http://video19.ifeng.com/video07/2013/11/11/281708-102-007-1138.mp4"));
+        arrayList.add(new HomePageMovieView("Godzilla v/s Kong ",R.drawable.edu2, 40,"https://videolinks.com/pub/media/videolinks/video/dji.osmo.action.mp4"));
     }
 
 
