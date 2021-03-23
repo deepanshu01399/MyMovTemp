@@ -3,15 +3,19 @@ package com.deepanshu.mymovieapp.ui.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.deepanshu.mymovieapp.BuildConfig;
 import com.deepanshu.mymovieapp.R;
 import com.deepanshu.mymovieapp.interfaces.FragmentChangeListener;
 import com.deepanshu.mymovieapp.ui.custom.ColoredSnackbar;
@@ -38,6 +43,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public  class MainDashBoardActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private BottomNavigationView bottomNavigationView;
@@ -46,7 +58,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
     private Toolbar toolbar;
     private TextView mToolbarTitle, txtUserName;
     private Menu menuItems;
-    private RelativeLayout mainLayProfile;
+    private RelativeLayout mainLayProfile,mainLayShareApk;
     private final DashBoardFragment dashboardFragment = new DashBoardFragment();
     private BaseFragment currentFragment = dashboardFragment;
     public FragmentManager mFragmentManager;
@@ -86,6 +98,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         mainLayProfile = findViewById(R.id.mainLayProfile);
+        mainLayShareApk = findViewById(R.id.mainLayShareApk);
         txtUserName = findViewById(R.id.txtUserName);
 
         setonClickListner();
@@ -147,6 +160,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         navigationView.setNavigationItemSelectedListener(this);
         mainLayProfile.setOnClickListener(this);
+        mainLayShareApk.setOnClickListener(this);
 
     }
 
@@ -384,6 +398,10 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
             case R.id.txtSave:
                 Toast.makeText(this, "Save clicked", Toast.LENGTH_SHORT).show();
                 break;
+
+            case R.id.mainLayShareApk:
+                shareApplication();
+                break;
         }
         checkAndSetCurrentFragment();
 
@@ -479,6 +497,58 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
             bottomNavigationView.setVisibility(View.GONE);
         }
 
+    }
+    private void shareApplication() {
+        ApplicationInfo app = getApplicationContext().getApplicationInfo();
+        String filePath = app.sourceDir;
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+
+        // MIME of .apk is "application/vnd.android.package-archive".
+        // but Bluetooth does not accept this. Let's use "*/*" instead.
+        intent.setType("*/*");
+
+        // Append file and send Intent
+        File originalApk = new File(filePath);
+
+        try {
+            //Make new directory in new location=
+            File tempFile = new File(getExternalCacheDir() + "/ExtractedApk");
+            //If directory doesn't exists create new
+            if (!tempFile.isDirectory())
+                if (!tempFile.mkdirs())
+                    return;
+            //Get application's name and convert to lowercase
+            tempFile = new File(tempFile.getPath() + "/" + getString(app.labelRes).replace(" ","").toLowerCase() + ".apk");
+            //If file doesn't exists create new
+            if (!tempFile.exists()) {
+                if (!tempFile.createNewFile()) {
+                    return;
+                }
+            }
+            //Copy file to new location
+            InputStream in = new FileInputStream(originalApk);
+            OutputStream out = new FileOutputStream(tempFile);
+
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+            System.out.println("File copied.");
+            //Open share dialog
+//          intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(tempFile));
+            Uri photoURI = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileprovider", tempFile);
+            //Uri photoURI = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", tempFile);
+//          intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(tempFile));
+            intent.putExtra(Intent.EXTRA_STREAM, photoURI);
+            startActivity(Intent.createChooser(intent, "Share app via"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.AudioManager;
@@ -43,10 +44,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.deepanshu.mymovieapp.BuildConfig;
 import com.deepanshu.mymovieapp.R;
 import com.deepanshu.mymovieapp.adapter.CommanMovieAdapter;
 import com.deepanshu.mymovieapp.interfaces.FragmentChangeListener;
@@ -83,6 +86,12 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -138,6 +147,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     private float baseX, baseY;
     private RelativeLayout movieDetailLayout;
     private ImageView exo_next;
+    private Button btnShare;
     public enum ControlsMode {
         LOCK, FULLCONTORLS
     }
@@ -216,7 +226,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
         brightness_center_text = findViewById(R.id.brightness_center_text);
         brightness_image = findViewById(R.id.brightness_image);
         brigtness_perc_center_text = findViewById(R.id.brigtness_perc_center_text);
-
+        btnShare = findViewById(R.id.Share);
         volume_slider_container = findViewById(R.id.volume_slider_container);
         volIcon = findViewById(R.id.volIcon);
         volume_slider = findViewById(R.id.volume_slider);
@@ -483,6 +493,8 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
         lockExo.setOnClickListener(this);
         videoHeaderRelLayout.setVisibility(View.GONE);
         exo_next.setOnClickListener(this);
+        btnShare.setOnClickListener(this);
+
         //todo make window full screen
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -648,6 +660,23 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
 
                 break;
 
+            case R.id.Share:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                int currentPlayingListVideo =  simpleExoPlayer.getCurrentWindowIndex();
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT,"Movies details");
+                sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "deepanshu@gmail.com","abc@gmail.com"});
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Movie Name : "+ arrayList.get(currentPlayingListVideo).getMovieName()+"\n"+
+                            arrayList.get(currentPlayingListVideo).getVedioUrl());
+               // sendIntent.putExtra(Intent.EXTRA_TEXT,"Hey check out my app at: https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID);
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, "Share movie to...");
+                if(simpleExoPlayer!=null)
+                    simpleExoPlayer.stop();
+                startActivity(shareIntent);
+                //shareApplication();
+                break;
+
             case R.id.btnMyList:
                 break;
 
@@ -660,10 +689,10 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
 
             case R.id.exo_next:
                 Toast.makeText(this, "next", Toast.LENGTH_SHORT).show();
-               int currentPlayingListVideo =  simpleExoPlayer.getCurrentWindowIndex();
-               if(arrayList.size()>currentPlayingListVideo+1)
-               updateMovieDetailinfo(arrayList.get(currentPlayingListVideo+1));
-                simpleExoPlayer.seekTo(currentPlayingListVideo+1,C.TIME_UNSET);
+               int currentPlayingListVideo1 =  simpleExoPlayer.getCurrentWindowIndex();
+               if(arrayList.size()>currentPlayingListVideo1+1)
+               updateMovieDetailinfo(arrayList.get(currentPlayingListVideo1+1));
+                simpleExoPlayer.seekTo(currentPlayingListVideo1+1,C.TIME_UNSET);
                 simpleExoPlayer.setPlayWhenReady(true);
 
                 break;
