@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -94,7 +95,7 @@ import static com.deepanshu.mymovieapp.util.StaticUtil.getScreenHeight;
 import static com.deepanshu.mymovieapp.util.StaticUtil.getScreenWidth;
 
 public class MovieDetailActvity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener, TextView.OnEditorActionListener {
-    private ImageView thumnailImage;
+    //private ImageView thumnailImage;
     private TextView txtVideoTitle, txtVedioDesc;
     private CheckBox txtShowMore;
     private RecyclerView recyclerRelatedVedio;
@@ -116,7 +117,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     private SimpleExoPlayer simpleExoPlayer;
     private Boolean wantsTOExit = false;
     private Boolean currentlyOnLandscapeMode = false;
-    private CollapsingToolbarLayout collapsingToolbarlayout;
+    private RelativeLayout collapsingToolbarlayout;
     private int uiImmersiveOptions;
     private HomePageMovieView homePageMovieViewDetailData;
     int lastWindowIndex = 0; // global var in your class encapsulating exoplayer obj (Activity, etc.)
@@ -124,7 +125,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     private TextView exo_title, brigtness_perc_center_text, vol_perc_center_text;
     private AudioManager audioManager;
     private SeekBar volumeSeekBar, brightNessSeekbar;
-    private ImageView brightnessIcon, brightness_image, volIcon, vol_image,lockExo;
+    private ImageView brightnessIcon, brightness_image, volIcon, vol_image, lockExo;
     private ProgressBar brightness_slider, volume_slider;
     private int screenWidth, screenHeight;
     private boolean immersiveMode, intLeft, intRight, intTop, intBottom, finLeft, finRight, finTop, finBottom;
@@ -132,8 +133,9 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     private double seekSpeed = 0;
     private int calculatedTime;
     private String seekDur;
-    private Boolean tested_ok = false;
+    private Boolean tested_ok = false, allThingsRegForFirstTime = false;
     private Boolean screen_swipe_move = false;
+    private int methodcallNO = 0;
     private float baseX, baseY;
 
     public enum ControlsMode {
@@ -143,7 +145,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     private static final int MIN_DISTANCE = 150;
     private ContentResolver cResolver;
     private Window window;
-    private int brightness, mediavolume, device_height, device_width;
+    private int brightness, mediavolume, device_height;
 
     private ControlsMode controlsState;
     private Boolean wantsToLockExoPlayer = true;
@@ -195,7 +197,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
         progressBar = findViewById(R.id.progress_bar);
         fullScreen = findViewById(R.id.bt_fullScreen);
         fullScreen.setOnClickListener(this);
-        thumnailImage = findViewById(R.id.thumnailImage);
+        //thumnailImage = findViewById(R.id.thumnailImage);
         txtVideoTitle = findViewById(R.id.txtVideoTitle);
         txtShowMore = findViewById(R.id.txtShowMore);
         txtVedioDesc = findViewById(R.id.txtVedioDesc);
@@ -225,15 +227,19 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
         vol_image = findViewById(R.id.vol_image);
         vol_perc_center_text = findViewById(R.id.vol_perc_center_text);
         unlock_panel = findViewById(R.id.unlock_panel);
-        root = findViewById(R.id.unlock_panel);
+        root = findViewById(R.id.root);
         lockExo = findViewById(R.id.lockExo);
 
         screenWidth = getScreenWidth(this);
         screenHeight = getScreenHeight(this);
 
-        thumnailImage.setImageResource(imageurl);
+        //thumnailImage.setImageResource(imageurl);
         txtVideoTitle.setText(movieTitle);
         exo_title.setText(movieTitle);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        volume_slider.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+        volume_slider.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+
 
         checkPermission();
         setonClickListner();
@@ -249,43 +255,16 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN://when user press the finger on touch screen
-                tested_ok = false;
-                if (event.getX() < (screenWidth / 2)) {
-                    intLeft = true;
-                    intRight = false;
-                } else if (event.getX() > (screenWidth / 2)) {
-                    intLeft = false;
-                    intRight = true;
-                }
-                int upperLimit = (screenHeight / 4) + 100;
-                int lowerLimit = ((screenHeight / 4) * 3) - 150;
-                if (event.getY() < upperLimit) {
-                    intBottom = false;
-                    intTop = true;
-                } else if (event.getY() > lowerLimit) {
-                    intBottom = true;
-                    intTop = false;
-                } else {
-                    intBottom = false;
-                    intTop = false;
-                }
-                seekSpeed = (TimeUnit.MILLISECONDS.toSeconds(simpleExoPlayer.getDuration()) * 0.1);
-                diffX = 0;
-                calculatedTime = 0;
-                seekDur = String.format("%02d:%02d",
-                        TimeUnit.MILLISECONDS.toMinutes(diffX) -
-                                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffX)),
-                        TimeUnit.MILLISECONDS.toSeconds(diffX) -
-                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(diffX)));
-
-                //TOUCH STARTED
-                baseX = event.getX();
-                baseY = event.getY();
+                //actionDownTouchEvent(event);
                 break;
             case MotionEvent.ACTION_MOVE://when user moves its finger
                 screen_swipe_move = true;
+                if (!allThingsRegForFirstTime && methodcallNO == 0) {
+                    methodcallNO = 1;
+                    actionDownTouchEvent(event);
+                }
                 if (controlsState == ControlsMode.FULLCONTORLS) {
-                    //root.setVisibility(View.GONE);
+                    root.setVisibility(View.GONE);
                     diffX = (long) (Math.ceil(event.getX() - baseX));
                     diffY = (long) Math.ceil(event.getY() - baseY);
                     double brightnessSpeed = 0.05;
@@ -294,6 +273,10 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
                     }
                     if (Math.abs(diffY) > Math.abs(diffX)) {
                         if (intLeft) {
+                            brightness_slider_container.setVisibility(View.VISIBLE);
+                            brightness_center_text.setVisibility(View.VISIBLE);
+                            volume_slider_container.setVisibility(View.GONE);
+                            vol_center_text.setVisibility(View.GONE);
                             cResolver = getContentResolver();
                             window = getWindow();
                             try {
@@ -303,24 +286,23 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
                                 e.printStackTrace();
                             }
                             int new_brightness = (int) (brightness - (diffY * brightnessSpeed));
+                            //Log.e(TAG, "NewBrightness" + new_brightness);
                             if (new_brightness > 250) {
                                 new_brightness = 250;
                             } else if (new_brightness < 1) {
                                 new_brightness = 1;
                             }
                             double brightPerc = Math.ceil((((double) new_brightness / (double) 250) * (double) 100));
-                            brightness_slider_container.setVisibility(View.VISIBLE);
-                            brightness_center_text.setVisibility(View.VISIBLE);
-                            brightNessSeekbar.setProgress((int) brightPerc);
+                            brightness_slider.setProgress((int) brightPerc);
                             if (brightPerc < 30) {
-                                brightnessIcon.setImageResource(R.drawable.brightness_medium);
-                                brightness_image.setImageResource(R.drawable.brightness_medium);
+                                brightnessIcon.setImageResource(R.drawable.ic_brightness_min);
+                                brightness_image.setImageResource(R.drawable.ic_brightness_min);
                             } else if (brightPerc > 30 && brightPerc < 80) {
                                 brightnessIcon.setImageResource(R.drawable.brightness_medium);
                                 brightness_image.setImageResource(R.drawable.brightness_medium);
                             } else if (brightPerc > 80) {
-                                brightnessIcon.setImageResource(R.drawable.brightness_medium);
-                                brightness_image.setImageResource(R.drawable.brightness_medium);
+                                brightnessIcon.setImageResource(R.drawable.ic_brightness_high);
+                                brightness_image.setImageResource(R.drawable.ic_brightness_high);
                             }
                             brigtness_perc_center_text.setText(" " + (int) brightPerc);
                             Settings.System.putInt(cResolver, Settings.System.SCREEN_BRIGHTNESS, (new_brightness));
@@ -328,9 +310,13 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
                             layoutpars.screenBrightness = brightness / (float) 255;
                             window.setAttributes(layoutpars);
                         } else if (intRight) {
+                            volume_slider_container.setVisibility(View.VISIBLE);
                             vol_center_text.setVisibility(View.VISIBLE);
+                            brightness_slider_container.setVisibility(View.GONE);
+                            brightness_center_text.setVisibility(View.GONE);
                             mediavolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
                             int maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                            device_height = getScreenHeight(this);
                             double cal = (double) diffY * ((double) maxVol / (double) (device_height * 4));
                             int newMediaVolume = mediavolume - (int) cal;
                             if (newMediaVolume > maxVol) {
@@ -338,28 +324,27 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
                             } else if (newMediaVolume < 1) {
                                 newMediaVolume = 0;
                             }
-                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newMediaVolume, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+                            audioManager.setStreamVolume(simpleExoPlayer.getAudioStreamType(), newMediaVolume, 0);
+                            //audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newMediaVolume, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
                             double volPerc = Math.ceil((((double) newMediaVolume / (double) maxVol) * (double) 100));
+                            //Log.e(TAG, "diffy:"+diffY+",maxvol:"+maxVol+",currentVol:" + mediavolume + ",cal:"+cal+",newMediaVol:" + newMediaVolume + ",VolPercentage:" + volPerc);
                             vol_perc_center_text.setText(" " + (int) volPerc);
+                            volume_slider.setProgress((int) volPerc);
                             if (volPerc < 1) {
                                 volIcon.setImageResource(R.drawable.vol_mute);
                                 vol_image.setImageResource(R.drawable.vol_mute);
                                 vol_perc_center_text.setVisibility(View.GONE);
                             } else if (volPerc >= 1) {
-                                volIcon.setImageResource(R.drawable.vol_mute);
-                                vol_image.setImageResource(R.drawable.vol_mute);
+                                volIcon.setImageResource(R.drawable.volume_icon);
+                                vol_image.setImageResource(R.drawable.volume_icon);
                                 vol_perc_center_text.setVisibility(View.VISIBLE);
                             }
-                            volume_slider_container.setVisibility(View.VISIBLE);
-                            volumeSeekBar.setProgress((int) volPerc);
                         }
-                    }
-                    /*
-                    else if (Math.abs(diffX) > Math.abs(diffY)) {
+                    } else if (Math.abs(diffX) > Math.abs(diffY)) {
                         if (Math.abs(diffX) > (MIN_DISTANCE + 100)) {
                             tested_ok = true;
                             //root.setVisibility(View.VISIBLE);
-                            brightness_center_text.setVisibility(View.VISIBLE);
+                            //brightness_center_text.setVisibility(View.VISIBLE);
                             //onlySeekbar.setVisibility(View.VISIBLE);
                             //top_controls.setVisibility(View.GONE);
                             //bottom_controls.setVisibility(View.GONE);
@@ -387,12 +372,13 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
                             //txt_seek_currTime.setText(totime);
                             //seekBar.setProgress((int) (simpleExoPlayer.getCurrentPosition() + (calculatedTime)));
                         }
-                        }
-*/
+                    }
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                allThingsRegForFirstTime = false;
+                methodcallNO = 0;
                 screen_swipe_move = false;
                 tested_ok = false;
                 vol_perc_center_text.setVisibility(View.GONE);
@@ -411,6 +397,49 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
 
         }
         return super.onTouchEvent(event);
+    }
+
+    private void actionDownTouchEvent(MotionEvent event) {
+        allThingsRegForFirstTime = true;
+        tested_ok = false;
+        screenWidth = getScreenWidth(this);
+        screenHeight = getScreenHeight(this);
+        Log.e(TAG, "ScreenWidth:" + screenWidth);
+        if (event.getX() < (screenWidth / 2)) {
+            intLeft = true;
+            intRight = false;
+        } else if (event.getX() > (screenWidth / 2)) {
+            intLeft = false;
+            intRight = true;
+        }
+        int upperLimit = (screenHeight / 4) + 100;
+        int lowerLimit = ((screenHeight / 4) * 3) - 150;
+        if (event.getY() < upperLimit) {
+            intBottom = false;
+            intTop = true;
+        } else if (event.getY() > lowerLimit) {
+            intBottom = true;
+            intTop = false;
+        } else {
+            intBottom = false;
+            intTop = false;
+        }
+        Log.e(TAG, "left:" + intLeft + ",right:" + intRight + ",intTop:" + intTop + ",intBottom:" + intBottom + "no. of call:" + methodcallNO + "");
+        methodcallNO++;
+        seekSpeed = (TimeUnit.MILLISECONDS.toSeconds(simpleExoPlayer.getDuration()) * 0.1);
+        diffX = 0;
+        calculatedTime = 0;
+        seekDur = String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(diffX) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffX)),
+                TimeUnit.MILLISECONDS.toSeconds(diffX) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(diffX)));
+
+        //TOUCH STARTED
+        baseX = event.getX();
+        baseY = event.getY();
+
+
     }
 
     private void hideAllControls() {
@@ -440,7 +469,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
 
 
     private void setonClickListner() {
-        thumnailImage.setOnClickListener(this);
+        // thumnailImage.setOnClickListener(this);
         txtShowMore.setOnCheckedChangeListener(this);
         txtCommentText.setOnEditorActionListener(this);
         btnBuyNow.setOnClickListener(this);
@@ -628,15 +657,14 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
                 if (wantsToLockExoPlayer) {
                     controlsState = ControlsMode.LOCK;
                     root.setVisibility(View.GONE);
-                    lockExo.setImageResource(R.drawable.ic_baseline_lock);
-                    unlock_panel.setVisibility(View.VISIBLE);
+                    lockExo.setImageResource(R.drawable.ic_un_lock);
                     wantsToLockExoPlayer = false;
 
                 } else {
                     controlsState = ControlsMode.FULLCONTORLS;
                     root.setVisibility(View.VISIBLE);
                     lockExo.setImageResource(R.drawable.ic_baseline_lock);
-                    unlock_panel.setVisibility(View.GONE);
+                    //lockExo.setBackgroundColor(getResources().getColor(R.color.light_grey_text));
                     wantsToLockExoPlayer = true;
 
                 }
@@ -675,7 +703,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
 
         collapsingToolbarlayout.getLayoutParams().width = getScreenWidth(MovieDetailActvity.this);
         collapsingToolbarlayout.getLayoutParams().height = getScreenHeight(MovieDetailActvity.this) / 3;
-       // MovieDetailActvity.this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        // MovieDetailActvity.this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         MovieDetailActvity.this.getWindow().getDecorView().setSystemUiVisibility(uiImmersiveOptions);
 
     }

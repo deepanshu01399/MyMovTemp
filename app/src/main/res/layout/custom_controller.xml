@@ -50,7 +50,7 @@
         android:layout_marginBottom="50dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/brightnessIcon"
@@ -68,7 +68,7 @@
             android:layout_marginRight="0dp"
             android:layout_marginBottom="0dp"
             android:max="100"
-            android:progress="33"
+            android:progress="10"
             android:progressDrawable="@drawable/vertical_design_brightness"
             android:visibility="visible" />
     </LinearLayout>
@@ -80,7 +80,7 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/brightness_image"
@@ -92,7 +92,6 @@
             android:id="@+id/brigtness_perc_center_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" 22"
             android:textColor="#FFF"
             android:textSize="50dp"
             android:textStyle="bold" />
@@ -107,7 +106,7 @@
         android:layout_marginBottom="50dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/volIcon"
@@ -125,7 +124,7 @@
             android:layout_marginRight="0dp"
             android:layout_marginBottom="0dp"
             android:max="100"
-            android:progress="33"
+            android:progress="10"
             android:progressDrawable="@drawable/vertical_design_vol"
             android:visibility="visible" />
     </LinearLayout>
@@ -149,7 +148,6 @@
             android:id="@+id/vol_perc_center_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" 22"
             android:textColor="#FFF"
             android:textSize="50dp"
             android:textStyle="bold" />
