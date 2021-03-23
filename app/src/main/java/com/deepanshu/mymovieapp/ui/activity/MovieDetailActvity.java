@@ -110,7 +110,6 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     private Button btnWatchNow, download, btnMyList, btnBuyNow;
     private static final String STATE_COMMENT_LIST = "comments";
     private ArrayList<CommentModule> commentModuleList;
-    public LayoutInflater mInflater;
     private PlayerView playerView;
     private ProgressBar progressBar;
     private ImageView fullScreen;
@@ -137,7 +136,8 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     private Boolean screen_swipe_move = false;
     private int methodcallNO = 0;
     private float baseX, baseY;
-
+    private RelativeLayout movieDetailLayout;
+    private ImageView exo_next;
     public enum ControlsMode {
         LOCK, FULLCONTORLS
     }
@@ -170,11 +170,8 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
            */
             //to get data from a  parceble intent
             homePageMovieViewDetailData = intent.getParcelableExtra("detailedCLickedMovie");
-            imageurl = homePageMovieViewDetailData.getThumbNailImages();
-            movieUrl = homePageMovieViewDetailData.getVedioUrl();
-            movieProgress = homePageMovieViewDetailData.getMovieProgress();
-            movieTitle = homePageMovieViewDetailData.getMovieName();
             moviePosition = intent.getExtras().getInt("movielistPosition");
+            //updateMovieDetailinfo(homePageMovieViewDetailData);
         }
 
     }
@@ -229,13 +226,14 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
         unlock_panel = findViewById(R.id.unlock_panel);
         root = findViewById(R.id.root);
         lockExo = findViewById(R.id.lockExo);
+        movieDetailLayout = findViewById(R.id.movieDetailLayout);
+        exo_next = findViewById(R.id.exo_next);
 
         screenWidth = getScreenWidth(this);
         screenHeight = getScreenHeight(this);
 
         //thumnailImage.setImageResource(imageurl);
-        txtVideoTitle.setText(movieTitle);
-        exo_title.setText(movieTitle);
+        updateMovieDetailinfo(homePageMovieViewDetailData);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         volume_slider.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
         volume_slider.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
@@ -249,6 +247,12 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
         //dummyBrightNessScrolling();
 
 
+    }
+
+    private void updateMovieDetailinfo( HomePageMovieView homePageMovieView) {
+        txtVideoTitle.setText(homePageMovieView.getMovieName());
+        exo_title.setText(homePageMovieView.getMovieName());
+        //txtVedioDesc.setText(homePageMovieView.getVedioUrl());
     }
 
     @Override
@@ -478,6 +482,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
         download.setOnClickListener(this);
         lockExo.setOnClickListener(this);
         videoHeaderRelLayout.setVisibility(View.GONE);
+        exo_next.setOnClickListener(this);
         //todo make window full screen
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -653,6 +658,16 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
 
                 break;
 
+            case R.id.exo_next:
+                Toast.makeText(this, "next", Toast.LENGTH_SHORT).show();
+               int currentPlayingListVideo =  simpleExoPlayer.getCurrentWindowIndex();
+               if(arrayList.size()>currentPlayingListVideo+1)
+               updateMovieDetailinfo(arrayList.get(currentPlayingListVideo+1));
+                simpleExoPlayer.seekTo(currentPlayingListVideo+1,C.TIME_UNSET);
+                simpleExoPlayer.setPlayWhenReady(true);
+
+                break;
+
             case R.id.lockExo:
                 if (wantsToLockExoPlayer) {
                     controlsState = ControlsMode.LOCK;
@@ -681,6 +696,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
 
         collapsingToolbarlayout.getLayoutParams().width = getScreenWidth(MovieDetailActvity.this);
         collapsingToolbarlayout.getLayoutParams().height = getScreenHeight(MovieDetailActvity.this);
+        movieDetailLayout.setBackgroundColor(getResources().getColor(R.color.background_dark));
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         uiImmersiveOptions = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -700,7 +716,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
         playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
         simpleExoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
         videoHeaderRelLayout.setVisibility(View.GONE);
-
+        movieDetailLayout.setBackgroundColor(getResources().getColor(R.color.black_white_backgound));
         collapsingToolbarlayout.getLayoutParams().width = getScreenWidth(MovieDetailActvity.this);
         collapsingToolbarlayout.getLayoutParams().height = getScreenHeight(MovieDetailActvity.this) / 3;
         // MovieDetailActvity.this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -894,7 +910,12 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
 
             @Override
             public void onClick(View view, Object object, int position) {
+                HomePageMovieView homePageMovieView = (HomePageMovieView) object;
                 Toast.makeText(view.getContext(), "you clicked on: " + (position + 1), Toast.LENGTH_SHORT).show();
+                //arrayList.set(0,homePageMovieView);
+                simpleExoPlayer.seekTo(position,C.TIME_UNSET);
+                simpleExoPlayer.setPlayWhenReady(true);
+                updateMovieDetailinfo(homePageMovieView);
 
             }
         });
@@ -982,6 +1003,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
             try {
+                volume_slider.setProgress(audioManager.getStreamVolume(simpleExoPlayer.getAudioStreamType()));
                 volumeSeekBar.setProgress(audioManager.getStreamVolume(simpleExoPlayer.getAudioStreamType()));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -995,6 +1017,7 @@ public class MovieDetailActvity extends BaseActivity implements BottomNavigation
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
             try {
+                volume_slider.setProgress(audioManager.getStreamVolume(simpleExoPlayer.getAudioStreamType()));
                 volumeSeekBar.setProgress(audioManager.getStreamVolume(simpleExoPlayer.getAudioStreamType()));
             } catch (Exception e) {
                 e.printStackTrace();

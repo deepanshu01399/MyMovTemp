@@ -6,12 +6,15 @@
     android:layout_height="match_parent"
     android:background="@color/black_white_backgound"
     android:fitsSystemWindows="true"
+    android:id="@+id/movieDetailLayout"
     tools:context=".ui.activity.MainDashBoardActivity">
 
     <RelativeLayout
         android:id="@+id/collapsingToolbarlayout"
         android:layout_width="match_parent"
         android:layout_height="240dp"
+        android:gravity="center"
+        android:background="@android:color/background_dark"
         android:fitsSystemWindows="true">
 
 

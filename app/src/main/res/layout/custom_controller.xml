@@ -260,7 +260,7 @@
                     android:layout_marginHorizontal="4dp"
                     android:layout_toRightOf="@id/exo_position"
                     android:text="/"
-                    android:textColor="#CBCDC8" />
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/exo_duration"
@@ -268,7 +268,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/exp_slash"
                     android:text="/"
-                    android:textColor="#CBCDC8" />
+                    android:textColor="@color/white" />
 
                 <ImageView
                     android:id="@+id/bt_fullScreen"

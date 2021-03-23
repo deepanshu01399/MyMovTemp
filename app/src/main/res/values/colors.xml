@@ -40,5 +40,6 @@
     <color name="black_white_backgound">#504F4F</color>
     <color name="black_white_txt">#FFFFFF</color>
     <color name="black_white_hint">#ccc</color>
+    <color name="background_dark">#ff000000</color>
 
 </resources>
