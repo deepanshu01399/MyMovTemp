@@ -38,6 +38,9 @@ import com.deepanshu.mymovieapp.interfaces.FragmentChangeListener;
 import com.deepanshu.mymovieapp.ui.custom.ColoredSnackbar;
 import com.deepanshu.mymovieapp.ui.fragment.BaseFragment;
 import com.deepanshu.mymovieapp.ui.fragment.DashBoardFragment;
+import com.deepanshu.mymovieapp.ui.fragment.DownloadFragment;
+import com.deepanshu.mymovieapp.ui.fragment.MainLocalVideoFragment;
+import com.deepanshu.mymovieapp.ui.fragment.MainMusicFragment;
 import com.deepanshu.mymovieapp.ui.fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -280,6 +283,18 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
             case R.id.profile:
                 currentFragment = new ProfileFragment();
                 break;
+            case R.id.downloads:
+                currentFragment = new DownloadFragment();
+
+                break;
+            case R.id.music:
+                currentFragment = new MainMusicFragment();
+
+                break;
+            case R.id.localVideo:
+                currentFragment = new MainLocalVideoFragment();
+
+                break;
             default:
                 currentFragment = new DashBoardFragment();
         }
@@ -400,6 +415,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                 break;
 
             case R.id.mainLayShareApk:
+                Toast.makeText(this, "Prepairing the APK", Toast.LENGTH_SHORT).show();
                 shareApplication();
                 break;
         }

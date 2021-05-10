@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="@color/lightwhite">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:gravity="center_horizontal"
+        android:background="@color/grey_arrow">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/localVideoThumbNail"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="@dimen/_5dp"
+            android:background="@color/cardview_dark_background"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/ic_play" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
+            android:gravity="center"
+            android:layout_marginTop="13dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Panchayat"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_below="@id/title"
+            android:text="4:00:05"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/videoSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:paddingBottom="10dp"
+            android:paddingEnd="@dimen/_5dp"
+            android:text="4:00:05"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+</RelativeLayout>

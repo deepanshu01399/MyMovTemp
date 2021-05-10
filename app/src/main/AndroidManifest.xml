@@ -16,8 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMovieApp">
         <activity android:name=".ui.activity.MainDashBoardActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection"
-            >
+            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,11 +26,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
-            
 
         </activity>
         <activity android:name=".ui.activity.MovieDetailActvity"
             android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection"/>
+
+        <activity android:name=".ui.activity.LocalVideoPlayActvity"
+            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection"/>
+
+        <activity android:name=".ui.activity.LocalVideoPlayListActvity"
+            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.deepanshu.mymovieapp.fileprovider"

@@ -7,26 +7,27 @@
         android:icon="@drawable/ic_baseline_person"
         android:title="Home"
         app:showAsAction="always" />
+
     <item
-        android:id="@+id/tasks"
+        android:id="@+id/localVideo"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_person"
+        android:icon="@drawable/ic_baseline_video_library"
+        android:title="Local"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/music"
+        android:enabled="true"
+        android:icon="@drawable/ic_ibrary_music"
+        android:title="Music"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/downloads"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_save"
         android:title="Downloads"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/three_sixty"
-        android:enabled="true"
-        android:icon="@drawable/ic_baseline_person"
-        android:title="Search"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/notification"
-        android:enabled="true"
-        android:icon="@drawable/ic_baseline_person"
-        android:title="Notification"
-        app:showAsAction="always" />
-
     <item
         android:id="@+id/profile"
         android:enabled="true"

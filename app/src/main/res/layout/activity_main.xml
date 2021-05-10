@@ -136,7 +136,7 @@
                                     android:background="@color/light_sky_blue"
                                     android:layout_marginHorizontal="4dp"
                                     android:layout_centerVertical="true"
-                                    android:src="@drawable/ic_baseline_person"
+                                    android:src="@drawable/ic_baseline_share"
                                     android:scaleType="fitXY" />
 
                                 <TextView
