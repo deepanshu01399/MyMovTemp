@@ -1,8 +1,11 @@
 package com.deepanshu.retrofit.interfaces;
 
+import com.deepanshu.retrofit.modules.responseModule.login.LoginResponse;
+
 import java.util.Map;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -65,5 +68,11 @@ public interface IRetrofitContract {
     Call<ActivitiesResponse> getActivitiesListData(@Header("Authorization") String token, @Query("moduleName") String moduleName, @Query("id") String id, @Query("relationship_name") String relationName, @Query("page_number") int pageNo, @Query("query_string") String searchKey);
 
 */
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST("access_token")
+    Call<LoginResponse> login(@Header("ClientVersion") String clientVersion, @Field("grant_type") String grant_type, @Field("client_id") String clientId, @Field("client_secret") int clent_secret
+            , @Field("username") String username, @Field("password") String password, @Field("device_token") String devicetoken, @Field("device_type") String deviceType);
+
 
 }

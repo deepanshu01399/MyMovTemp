@@ -2,10 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.deepanshu.mymovieapp">
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -15,27 +17,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMovieApp">
-        <activity android:name=".ui.activity.MainDashBoardActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">
+        <activity android:name=".ui.activity.ui.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".ui.activity.MovieDetailActvity"
-            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection"/>
 
-        <activity android:name=".ui.activity.LocalVideoPlayActvity"
-            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection"/>
-
-        <activity android:name=".ui.activity.LocalVideoPlayListActvity"
-            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection"/>
+        <activity
+            android:name=".ui.activity.MainDashBoardActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection"></activity>
+        <activity
+            android:name=".ui.activity.MovieDetailActvity"
+            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection" />
+        <activity
+            android:name=".ui.activity.LocalVideoPlayActvity"
+            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection" />
+        <activity
+            android:name=".ui.activity.LocalVideoPlayListActvity"
+            android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -44,8 +52,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
-   </application>
+    </application>
 
 </manifest>
