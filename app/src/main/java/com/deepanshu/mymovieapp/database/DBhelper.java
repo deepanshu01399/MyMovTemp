@@ -39,6 +39,7 @@ public class DBhelper extends SQLiteOpenHelper {
             }
         database.setTransactionSuccessful();
         }finally {
+
             database.endTransaction();
         }
 
