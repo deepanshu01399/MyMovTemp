@@ -1,8 +1,12 @@
 package com.deepanshu.retrofit.interfaces;
 
+import com.deepanshu.retrofit.modules.responseModule.compose_email.ComposeEmailResponse;
 import com.deepanshu.retrofit.modules.responseModule.login.LoginResponse;
 
+import java.util.List;
 import java.util.Map;
+
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -73,6 +77,9 @@ public interface IRetrofitContract {
     @POST("access_token")
     Call<LoginResponse> login(@Header("ClientVersion") String clientVersion, @Field("grant_type") String grant_type, @Field("client_id") String clientId, @Field("client_secret") int clent_secret
             , @Field("username") String username, @Field("password") String password, @Field("device_token") String devicetoken, @Field("device_type") String deviceType);
+    @Multipart
+    @POST("V8/compose-email")
+    Call<ComposeEmailResponse> hitComposeEmailApi(@Header("Authorization") String token, @Part("email_data") RequestBody emailData, @Part List<MultipartBody.Part> images);
 
 
 }

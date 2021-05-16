@@ -41,5 +41,8 @@
     <color name="black_white_txt">#FFFFFF</color>
     <color name="black_white_hint">#ccc</color>
     <color name="background_dark">#ff000000</color>
+    <color name="blue_text">@color/colorPrimary</color>
+    <string name="emailaddress">Email Addresses :</string>
+    <color name="colorPrimary">#4D80E4</color>
 
 </resources>

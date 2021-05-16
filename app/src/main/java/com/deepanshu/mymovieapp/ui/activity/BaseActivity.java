@@ -26,7 +26,9 @@ import androidx.core.content.ContextCompat;
 
 import com.deepanshu.mymovieapp.R;
 import com.deepanshu.mymovieapp.interfaces.IEssentialFeatures;
+import com.deepanshu.mymovieapp.prefs.SharedPreferencesFactory;
 import com.deepanshu.mymovieapp.ui.custom.ColoredSnackbar;
+import com.deepanshu.mymovieapp.util.PrefUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.net.InetAddress;
@@ -302,6 +304,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IEssenti
         } else {
             return capitalize(manufacturer) + " " + model;
         }
+    }
+
+    public String getDeviceToken(Context context){
+        SharedPreferencesFactory sharedPreferencesFactory = SharedPreferencesFactory.getInstance(context);
+        return sharedPreferencesFactory.getPreferenceValue(PrefUtil.PREFS_ACCESS_TOKEN);
+
     }
 
     private String getDeviceModel() {

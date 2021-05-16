@@ -22,5 +22,17 @@
         member of our Army and I’m hoping to get a nod from the officials.
         That’s my only wish after I decided to do this film,” said Allu Arjun on the sidelines of a special
         premiere for the Army personnel in Hyderabad.  </string>
+    <string name="to">To :</string>
+    <string name="cc">Cc :</string>
+    <string name="bcc">Bcc :</string>
+    <string name="from">From :</string>
+    <string name="to_astric">To<font color='#FF0000'> *</font> :</string>
+
+
+    <string name="upload">Upload :</string>
+    <string name="validation_image_size">Image too large, you can upload files up to 3 MB</string>
+    <string name="email_have_no_name">Email should not be empty</string>
+    <string name="is_not_a_valied_email">is not a valid email</string>
+    <string name="is_already_added">is alreay present</string>
 
 </resources>

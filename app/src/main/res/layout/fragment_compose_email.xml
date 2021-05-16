@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/app_bar_toolbar"
+        layout="@layout/email_app_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+
+
+    <ScrollView
+        android:layout_below="@id/app_bar_toolbar"
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:id="@+id/view_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:fitsSystemWindows="true"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar">
+
+                    <RelativeLayout
+                        android:id="@+id/profileLay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/imgProfilePic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="15dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="30dp"
+                            android:background="@drawable/circular_background"
+                            android:gravity="center"
+                            android:text=""
+                            android:textColor="@color/blue_text"
+                            android:textSize="22sp" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/profileLay"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtUserName"
+                            style="@style/TextFontPoppinsStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Name"
+                            android:textColor="@color/blue_text"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/txtuserOutBoundEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginRight="16dp"
+                            android:background="?android:selectableItemBackground"
+                            android:clickable="true"
+                            android:drawableRight="@drawable/ic_exp_arrow_down"
+                            android:text="deepanshu01399@gmail.com"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerOutBoundEmails"
+                            android:layout_width="fill_parent"
+                            android:layout_height="0dp"
+                            android:layout_centerInParent="true"
+                            android:layout_weight="0"
+                            android:background="@null" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_margin"
+                    android:layout_marginRight="@dimen/standard_margin"
+                    android:layout_marginBottom="@dimen/standard_margin"
+                    android:elevation="@dimen/card_elevation"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardCornerRadius="@dimen/card_radius"
+                    app:cardElevation="@dimen/card_elevation">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="@dimen/standard_margin"
+                        android:layout_marginVertical="10dp"
+                        android:orientation="vertical">
+
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/txtTo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="@string/to_astric"
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                            <EditText
+                                android:id="@+id/edtEmailTo"
+                                style="@style/BlueEditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="6dp"
+                                android:layout_toLeftOf="@id/btncancelTo"
+                                android:layout_toRightOf="@id/txtTo"
+                                android:background="@android:color/transparent"
+                                android:inputType="textEmailAddress|textNoSuggestions" />
+
+
+                            <ImageButton
+                                android:id="@+id/btnAddotherToEmail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="1dp"
+                                android:background="@null"
+                                android:tint="@color/blue_text"
+                                app:srcCompat="@drawable/add_circle" />
+
+                            <ImageButton
+                                android:id="@+id/btncancelTo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_toLeftOf="@id/btnAddotherToEmail"
+                                android:background="?android:selectableItemBackground"
+                                android:tint="@color/blue_text"
+                                app:srcCompat="@drawable/ic_cancel" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/chipsLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:background="@color/grey"
+                            android:orientation="horizontal"
+                            android:visibility="gone" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupTypeOfEmailTO"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:theme="@style/Theme.MaterialComponents.Light" />
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/grey"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/emailToErrorMsg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="15dp"
+                            android:text="proper search email required"
+                            android:textColor="@color/red"
+                            android:visibility="gone" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingVertical="10dp"
+                            android:paddingStart="10dp">
+
+                            <TextView
+                                android:id="@+id/txtCC"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/cc"
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                            <EditText
+                                android:id="@+id/edtCC"
+                                style="@style/BlueEditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="6dp"
+                                android:layout_marginTop="3dp"
+                                android:layout_toRightOf="@id/txtCC"
+                                android:background="@android:color/transparent"
+                                android:inputType="textEmailAddress|textNoSuggestions" />
+
+                            <ImageButton
+                                android:id="@+id/btnAddotherCCEmail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="1dp"
+                                android:background="@null"
+                                android:tint="@color/blue_text"
+                                app:srcCompat="@drawable/add_circle" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/chipsLineCC"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginRight="1dp"
+                            android:background="@color/grey"
+                            android:orientation="horizontal"
+                            android:visibility="gone" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupTypeOfEmailCC"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:theme="@style/Theme.MaterialComponents.Light" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/grey"
+                            android:visibility="visible" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:id="@+id/txtsubject"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Subject "
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+
+                            <EditText
+                                android:id="@+id/edtMailSubject"
+                                style="@style/BlueEditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:background="@android:color/transparent"
+                                android:inputType="textEmailSubject|textMultiLine|textNoSuggestions" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@color/grey"
+                            android:visibility="visible" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:background="@drawable/border_grey"
+                        android:visibility="visible" >
+
+                        <LinearLayout
+                            android:id="@+id/llhtmlEditor"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:orientation="vertical"
+                            android:visibility="visible" >
+
+                        <com.htmleditor.HtmlTextEditor
+                            android:id="@+id/html_editor"
+                            android:saveEnabled="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        </LinearLayout>
+
+                        <WebView
+                            android:id="@+id/simpleWebView"
+                            android:paddingHorizontal="8dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txtAttachement"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            android:text="Attachments"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/emailAttachmentLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingStart="7dp"
+                            android:visibility="gone" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recylerviewImageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="7dp" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/spinkitBackgound"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_60pc"
+        android:visibility="gone">
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.Large.Circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:SpinKit_Color="@color/design_default_color_primary" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

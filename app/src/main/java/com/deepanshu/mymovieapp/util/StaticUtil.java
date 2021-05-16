@@ -1,10 +1,26 @@
 package com.deepanshu.mymovieapp.util;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.util.Base64;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
+import com.deepanshu.mymovieapp.R;
+
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -97,6 +113,93 @@ public class StaticUtil {
         } else {
             return bytes + " Bytes";
         }
+    }
+
+    public static String removeChar(String text) {
+        if (text != null && !text.equalsIgnoreCase("")) {
+            if (text.contains("&#039;"))
+                text = text.replaceAll("&#039;", "'");
+            if (text.contains("&quot;"))
+                text = text.replaceAll("&quot;", "\"");
+            if (text.contains("&amp;"))
+                text = text.replaceAll("&amp;", "&");
+            if (text.contains("&lt;"))
+                text = text.replaceAll("&lt;", "<");
+            if (text.contains("&gt;"))
+                text = text.replaceAll("&gt;", ">");
+            if (text.contains("&#039;"))
+                text = text.replaceAll("&#039;", "'");
+            if (text.contains("&quot;"))
+                text = text.replaceAll("&quot;", "\"");
+            if (text.contains("&gt;"))
+                text = text.replaceAll("&gt;", ">");
+
+//       text = text.replaceAll("&quot;", "");
+            text = text.replaceAll("&amp;/", "");
+            text = text.replaceAll("&amp;", "");
+            text = text.replaceAll("\\<.*?\\>", "");
+            return text;
+        } else return "";
+    }
+
+    public static void showSettingsDialog(final Activity activity,Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.Messagedialog));
+        builder.setTitle("Need Permissions");
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                openSettings(activity,context);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
+    }
+
+
+    // navigating user to app settings
+    private static void openSettings(Activity activity,Context context) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:" + context.getPackageName()));
+            activity.finish();
+            activity.startActivity(intent);
+            return;
+        }
+
+    }
+
+    public static String base64String(String string) {
+        String base64 = "";
+        if (string != null) {
+            base64 = Base64.encodeToString(string
+                    .getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+        }
+        return base64;
+    }
+
+    public static String base64toString(String encodedString) {
+        String decodedString = "";
+        if (encodedString != null) {
+            try {
+                byte[] decodedBytes = Base64.decode(encodedString, Base64.NO_WRAP);
+                decodedString = new String(decodedBytes);
+
+            } catch (Exception e) {
+
+            }
+        }
+        return decodedString;
     }
 
 }

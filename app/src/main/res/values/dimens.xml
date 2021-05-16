@@ -4,4 +4,7 @@
     <dimen name="_2dp">2dp</dimen>
     <dimen name="_18sp">18sp</dimen>
     <dimen name="four_dp_margin">4dp</dimen>
+    <dimen name="standard_margin">10dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_radius">4dp</dimen>
 </resources>

@@ -18,10 +18,13 @@ import com.deepanshu.mymovieapp.mvp.login.LoginPresenterImpl;
 import com.deepanshu.mymovieapp.prefs.SharedPreferencesFactory;
 import com.deepanshu.mymovieapp.ui.activity.BaseActivity;
 import com.deepanshu.mymovieapp.ui.activity.MainDashBoardActivity;
+import com.deepanshu.mymovieapp.ui.activity.ui.composeEmail.ComposeEmailActivity;
 import com.deepanshu.mymovieapp.util.AppUtil;
 import com.deepanshu.mymovieapp.util.PrefUtil;
 import com.deepanshu.retrofit.errors.ApiError;
 import com.deepanshu.retrofit.modules.responseModule.login.LoginResponse;
+
+import static com.deepanshu.mymovieapp.util.AppUtil.SUCESS_RESPONSE;
 
 public class LoginActivity extends BaseActivity implements ILoginView, View.OnClickListener {
     private ProgressBar progressBar;
@@ -119,6 +122,7 @@ public class LoginActivity extends BaseActivity implements ILoginView, View.OnCl
 
     }
 
+
     @Override
     public void hideProgressbar() {
 
@@ -166,19 +170,35 @@ public class LoginActivity extends BaseActivity implements ILoginView, View.OnCl
 
     @Override
     public void onSuccessApi(LoginResponse loginResponse) {
-        SharedPreferencesFactory sharedPreferencesFactory = SharedPreferencesFactory.getInstance(this);
-        SharedPreferences prefs = sharedPreferencesFactory.getSharedPreferences(MODE_PRIVATE);
-        sharedPreferencesFactory.writePreferenceValue(PrefUtil.PREFS_ACCESS_TOKEN,(loginResponse.getData().getLoginUser().getTokenType())+" "+(loginResponse.getData().getLoginUser().getAccessToken()));
+        switch (loginResponse.getStatus()){
+            case SUCESS_RESPONSE:
+                SharedPreferencesFactory sharedPreferencesFactory = SharedPreferencesFactory.getInstance(this);
+                SharedPreferences prefs = sharedPreferencesFactory.getSharedPreferences(MODE_PRIVATE);
+                sharedPreferencesFactory.writePreferenceValue(PrefUtil.PREFS_ACCESS_TOKEN,(loginResponse.getData().getLoginUser().getTokenType())+" "+(loginResponse.getData().getLoginUser().getAccessToken()));
+                sharedPreferencesFactory.writePreferenceValue(PrefUtil.PREFS_FIRST_NAME, loginResponse.getData().getLoginUser().getFirstName());
+                sharedPreferencesFactory.writePreferenceValue(PrefUtil.PREFS_LAST_NAME,loginResponse.getData().getLoginUser().getLastName());
+                sharedPreferencesFactory.writePreferenceValue(PrefUtil.PREFS_EMAIL_ADDR,loginResponse.getData().getLoginUser().getEmail());
+                sharedPreferencesFactory.writePreferenceValue(PrefUtil.PREFS_ID,loginResponse.getData().getLoginUser().getId());
 
-        Toast.makeText(this,loginResponse.getStatus()+" "+ loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
-        startActivityClearTop(MainDashBoardActivity.class, null, null);
-        finish();
+                startActivityClearTop(MainDashBoardActivity.class, null, null);
+                finish();
+                break;
+            default:
+                Toast.makeText(this,loginResponse.getStatus()+" "+ loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+        }
 
     }
 
     @Override
-    public void OnGettingError(ApiError error) {
+    public void onGettingError(ApiError error) {
         Toast.makeText(this, error.getStatusCode()+" "+error.getMessage(), Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onGettingThroableError(Throwable error) {
 
     }
 

@@ -11,7 +11,9 @@ public interface ILoginView {
     String getFirebaseID();
     String getAppVersion();
     void onSuccessApi(LoginResponse loginResponse);
-    void OnGettingError(ApiError error);
+    void onGettingError(ApiError error);
+    void onGettingThroableError(Throwable error);
+
     void updateSharedPrefValues();
     void showProgressBar();
     void hideProgressBar();

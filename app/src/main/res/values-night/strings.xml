@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="is_not_a_valied_email">is not a valid email</string>
+    <string name="email_have_no_name">Email should not be empty</string>
+    <string name="is_already_added">is alreay present</string>
+
+</resources>

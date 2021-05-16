@@ -7,6 +7,9 @@ public class AppUtil {
     public static final String DEVICE_TYPE = "android";
     public static final String BASE_URL = "https://stg2mayberrycrm.milnp.net/Api/index.php/";
 
+    public static final int SUCESS_RESPONSE = 7000;
+
+
 
 
 }

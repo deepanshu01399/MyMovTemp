@@ -1,7 +1,6 @@
 package com.deepanshu.mymovieapp.mvp.login;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.deepanshu.mymovieapp.util.AppUtil;
 import com.deepanshu.mymovieapp.util.RequestUtil;
@@ -16,7 +15,6 @@ import com.deepanshu.retrofit.modules.responseModule.login.LoginResponse;
 import com.google.gson.Gson;
 
 import java.lang.ref.WeakReference;
-
 import retrofit2.Call;
 
 import static com.deepanshu.mymovieapp.util.AppUtil.BASE_URL;
@@ -30,7 +28,6 @@ public class LoginPresenterImpl implements ILoginPresenter {
 
 
     public LoginPresenterImpl(ILoginView iLoginView) {
-        //this.iLoginView = iLoginView;
         this.iLoginView = new WeakReference<ILoginView>(iLoginView);
 
     }
@@ -62,8 +59,9 @@ public class LoginPresenterImpl implements ILoginPresenter {
             Log.e(TAG, "LoginRequest is: " + gson.toJson(loginRequest));
 
             currentScreenView.showProgressBar();
-
             mRetrofitFactory = RetrofitFactory.getInstance();
+
+            //todo method first by using retrofitcallback
             mRetrofitFactory.setRetrofitCallback(new IRetrofitResponseCallback<LoginResponse>() {
 
                 @Override
@@ -76,11 +74,38 @@ public class LoginPresenterImpl implements ILoginPresenter {
                 @Override
                 public void onErrorReceived(ApiError apiError) {
                     currentScreenView.hideProgressBar();
-                    currentScreenView.OnGettingError(apiError);
+                    currentScreenView.onGettingError(apiError);
 
                 }
             });
+
+
             IRetrofitContract iRetrofitContract = mRetrofitFactory.getRetrofitContract(BASE_URL);
+/*
+            Observable<LoginResponse> call =iRetrofitContract.login(appVersionHeader,granttype,client_id,client_secret,userName,userPass,fireBaseToken,deviceType);
+
+        call.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Observer<LoginResponse>() {
+                @Override
+                public void onSubscribe(@NonNull Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(@NonNull LoginResponse loginResponse) {
+                currentScreenView.onSuccessApi(loginResponse);
+                }
+
+                @Override
+                public void onError(@NonNull Throwable e) {
+                    currentScreenView.onGettingThroableError(e);
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+     */
             Call<LoginResponse> call =iRetrofitContract.login(appVersionHeader,granttype,client_id,client_secret,userName,userPass,fireBaseToken,deviceType);
             mRetrofitFactory.executeRequest(call, RequestUtil.LOGIN_API_CODE);
 
@@ -96,4 +121,15 @@ public class LoginPresenterImpl implements ILoginPresenter {
 
             return null;
         }
+
+    @Override
+    public void clearDB() {
+
+
     }
+
+    @Override
+    public void insertIntoDb(LoginResponse loginResponse) {
+
+    }
+}

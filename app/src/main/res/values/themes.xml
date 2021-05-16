@@ -34,4 +34,56 @@
         <item name="android:textColor">@drawable/state_on_off_textcolor</item>
     </style>
 
+
+    <style name="MyTextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxStrokeColor">@drawable/outline_stroke_color</item>
+        <item name="boxStrokeWidth">@dimen/_2dp</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="hintTextColor">@color/black</item>
+    </style>
+
+    <style name="BlueEditTextStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/grey_text</item>
+        <item name="colorControlActivated">@color/grey_text</item>
+        <item name="colorControlHighlight">@color/grey_text</item>
+        <item name="android:textColor">@color/blue_text</item>
+        <item name="android:textColorHint">@color/grey_text</item>
+        <item name="android:singleLine">false</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="searchBoxStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@drawable/outline_stroke_color</item>
+        <item name="boxStrokeWidth">@dimen/_2dp</item>
+        <item name="android:layout_marginLeft">@dimen/standard_margin</item>
+        <item name="android:layout_marginRight">@dimen/standard_margin</item>
+
+    </style>
+
+    <style name="BlueSelectedButtonStyle" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="BlueBorderButtonStyle" parent="TextAppearance.AppCompat.Button">
+        <item name="android:background">@drawable/login_button_pressed</item>
+        <item name="android:textColor">@color/blue_text</item>
+    </style>
+
+    <style name="WhiteBackground2">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="TextFontPoppinsStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="myChipStyle" parent="Theme.MaterialComponents.Light.NoActionBar"></style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="elevation">0dp</item>
+    </style>
+    <style name="Messagedialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

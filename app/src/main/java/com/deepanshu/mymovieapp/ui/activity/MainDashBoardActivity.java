@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -34,6 +35,8 @@ import android.widget.Toast;
 
 import com.deepanshu.mymovieapp.BuildConfig;
 import com.deepanshu.mymovieapp.R;
+import com.deepanshu.mymovieapp.database.DBUtils;
+import com.deepanshu.mymovieapp.database.DBhelper;
 import com.deepanshu.mymovieapp.interfaces.FragmentChangeListener;
 import com.deepanshu.mymovieapp.ui.custom.ColoredSnackbar;
 import com.deepanshu.mymovieapp.ui.fragment.BaseFragment;
@@ -42,6 +45,7 @@ import com.deepanshu.mymovieapp.ui.fragment.DownloadFragment;
 import com.deepanshu.mymovieapp.ui.fragment.MainLocalVideoFragment;
 import com.deepanshu.mymovieapp.ui.fragment.MainMusicFragment;
 import com.deepanshu.mymovieapp.ui.fragment.ProfileFragment;
+import com.deepanshu.mymovieapp.ui.module.SpinnerDataHolder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -52,6 +56,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.deepanshu.mymovieapp.database.DBTables.COLUMN_KEY;
+import static com.deepanshu.mymovieapp.database.DBTables.TABLE_NAME_GENDER;
+import static com.deepanshu.mymovieapp.database.DBUtils.getSelectedSpinnerItemObj;
+import static com.deepanshu.mymovieapp.database.DBUtils.getSpinnerList;
+import static com.deepanshu.mymovieapp.database.DBhelper.insertAll;
 
 public  class MainDashBoardActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, FragmentChangeListener, FragmentManager.OnBackStackChangedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
@@ -68,6 +80,7 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
     public static String TAG = "MainDashBoard";
     boolean doubleTabBackButton = false;
     private Boolean isAbleToAddOnStack = false;
+    private List<SpinnerDataHolder> genderList ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +91,19 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                     .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
 
+    }
+
+    private void addDatatoGender() {
+        genderList = new ArrayList<>();
+        SpinnerDataHolder spinnerDataHolder = new SpinnerDataHolder();
+        spinnerDataHolder.setKey("male");
+        spinnerDataHolder.setValue("Male");
+        genderList.add(spinnerDataHolder);
+        SpinnerDataHolder spinnerDataHolde1 = new SpinnerDataHolder();
+        spinnerDataHolde1.setKey("female");
+        spinnerDataHolde1.setValue("FeMale");
+        genderList.add(spinnerDataHolde1);
+        insertAll(MainDashBoardActivity.this,TABLE_NAME_GENDER,genderList);
     }
 
     public MainDashBoardActivity() {
@@ -96,6 +122,8 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
 
     @Override
     public void getViewById() {
+        addDatatoGender();
+
         mFragmentManager = getSupportFragmentManager();
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         drawer = findViewById(R.id.drawer_layout);
@@ -407,7 +435,8 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
             closeDrawer();
         switch (view.getId()) {
             case R.id.mainLayProfile:
-                Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "profile", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainDashBoardActivity.this, "Gender:"+getSpinnerDataList(TABLE_NAME_GENDER).get(0).getValue(), Toast.LENGTH_SHORT).show();
                 replaceFragment(new ProfileFragment(), getSupportFragmentManager(), false);
                 break;
             case R.id.txtSave:
@@ -420,6 +449,9 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
                 break;
         }
         checkAndSetCurrentFragment();
+//        DBhelper.clearTable(this,TABLE_NAME_GENDER);
+//        addDatatoGender();
+        clearDb();
 
     }
 
@@ -566,5 +598,24 @@ public  class MainDashBoardActivity extends BaseActivity implements BottomNaviga
             e.printStackTrace();
         }
     }
+
+
+    public List<SpinnerDataHolder> getSpinnerDataList(String TABLE_NAME) {
+        Cursor cursor = DBhelper.fetchRow(MainDashBoardActivity.this, TABLE_NAME, null, null, null, null);
+        List<SpinnerDataHolder> list = getSpinnerList(cursor);
+        return list;
+    }
+
+    public SpinnerDataHolder getSelectedSpinnerItem(String TABLE_NAME,String key) {
+        Cursor cursor = DBhelper.fetchRow(MainDashBoardActivity.this, TABLE_NAME, null, COLUMN_KEY + "=?",
+                new String[]{key}, null);
+        SpinnerDataHolder itemObj = getSelectedSpinnerItemObj(cursor);
+        return itemObj;
+    }
+    public void clearDb() {
+        DBhelper.clearDB(this);
+    }
+
+
 
 }
