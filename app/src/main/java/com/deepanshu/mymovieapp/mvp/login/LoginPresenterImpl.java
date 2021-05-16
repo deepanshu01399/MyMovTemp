@@ -15,6 +15,13 @@ import com.deepanshu.retrofit.modules.responseModule.login.LoginResponse;
 import com.google.gson.Gson;
 
 import java.lang.ref.WeakReference;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 
 import static com.deepanshu.mymovieapp.util.AppUtil.BASE_URL;
@@ -61,7 +68,7 @@ public class LoginPresenterImpl implements ILoginPresenter {
             currentScreenView.showProgressBar();
             mRetrofitFactory = RetrofitFactory.getInstance();
 
-            //todo method first by using retrofitcallback
+           /* //todo method first by using retrofitcallback
             mRetrofitFactory.setRetrofitCallback(new IRetrofitResponseCallback<LoginResponse>() {
 
                 @Override
@@ -78,13 +85,14 @@ public class LoginPresenterImpl implements ILoginPresenter {
 
                 }
             });
-
+*/
 
             IRetrofitContract iRetrofitContract = mRetrofitFactory.getRetrofitContract(BASE_URL);
-/*
-            Observable<LoginResponse> call =iRetrofitContract.login(appVersionHeader,granttype,client_id,client_secret,userName,userPass,fireBaseToken,deviceType);
 
-        call.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Observer<LoginResponse>() {
+            //  Call<LoginResponse> call =iRetrofitContract.login(appVersionHeader,granttype,client_id,client_secret,userName,userPass,fireBaseToken,deviceType);
+            Observable<LoginResponse> call = iRetrofitContract.login(appVersionHeader, granttype, client_id, client_secret, userName, userPass, fireBaseToken, deviceType);
+
+            call.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Observer<LoginResponse>() {
                 @Override
                 public void onSubscribe(@NonNull Disposable d) {
 
@@ -92,7 +100,7 @@ public class LoginPresenterImpl implements ILoginPresenter {
 
                 @Override
                 public void onNext(@NonNull LoginResponse loginResponse) {
-                currentScreenView.onSuccessApi(loginResponse);
+                    currentScreenView.onSuccessApi(loginResponse);
                 }
 
                 @Override
@@ -105,9 +113,8 @@ public class LoginPresenterImpl implements ILoginPresenter {
 
                 }
             });
-     */
-            Call<LoginResponse> call =iRetrofitContract.login(appVersionHeader,granttype,client_id,client_secret,userName,userPass,fireBaseToken,deviceType);
-            mRetrofitFactory.executeRequest(call, RequestUtil.LOGIN_API_CODE);
+
+            //mRetrofitFactory.executeRequest(call, RequestUtil.LOGIN_API_CODE);
 
         }
         return null;
@@ -115,12 +122,11 @@ public class LoginPresenterImpl implements ILoginPresenter {
     }
 
 
+    @Override
+    public String updateLoginResponse() {
 
-        @Override
-        public String updateLoginResponse () {
-
-            return null;
-        }
+        return null;
+    }
 
     @Override
     public void clearDB() {

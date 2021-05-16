@@ -75,7 +75,7 @@ public interface IRetrofitContract {
     @Headers("Content-Type:application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST("access_token")
-    Call<LoginResponse> login(@Header("ClientVersion") String clientVersion, @Field("grant_type") String grant_type, @Field("client_id") String clientId, @Field("client_secret") int clent_secret
+    Observable<LoginResponse> login(@Header("ClientVersion") String clientVersion, @Field("grant_type") String grant_type, @Field("client_id") String clientId, @Field("client_secret") int clent_secret
             , @Field("username") String username, @Field("password") String password, @Field("device_token") String devicetoken, @Field("device_type") String deviceType);
     @Multipart
     @POST("V8/compose-email")
